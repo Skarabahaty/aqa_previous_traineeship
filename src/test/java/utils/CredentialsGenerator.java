@@ -1,0 +1,42 @@
+package utils;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class CredentialsGenerator {
+
+    public static String generatePassword(String email) {
+        StringBuilder password = new StringBuilder();
+
+        String passwordBase = Randomizer.getRandomStringLowerCase(8);
+        password.append(passwordBase);
+
+        int length = email.length();
+        int charPosition = Randomizer.getRandomIntInRange(0, length);
+        char charFromEmail = email.charAt(charPosition);
+        password.append(charFromEmail);
+
+        int randomInt = Randomizer.getRandomInt();
+        password.append(randomInt);
+
+        char randomCharUpperCase = Randomizer.getRandomCharUpperCase();
+        password.append(randomCharUpperCase);
+
+        String randomCyrillicSymbol = Randomizer.getRandomCyrillicSymbol();
+        password.append(randomCyrillicSymbol);
+
+        return String.valueOf(password);
+    }
+
+    public static HashMap<String, String> generateEmail() {
+        String email = Randomizer.getRandomStringLowerCase(5);
+        String domain = Randomizer.getRandomStringLowerCase(3);
+        String dotSomething = String.valueOf(Randomizer.getRandomIntInRange(1, 10));
+
+        return (HashMap<String, String>) Map.of("email", email,
+                "domain", domain,
+                "dot", dotSomething);
+    }
+
+
+}
