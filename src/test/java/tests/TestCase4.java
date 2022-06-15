@@ -1,14 +1,11 @@
 package tests;
 
-import aquality.selenium.browser.AqualityServices;
-import aquality.selenium.elements.ElementType;
 import entities.forms.LoginWithPasswordCheckForm;
 import entities.forms.MainPage;
-import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class TestCase2 extends BaseTest {
+public class TestCase4 extends BaseTest {
 
     @Test
     public void test() {
@@ -19,7 +16,8 @@ public class TestCase2 extends BaseTest {
 
         mainPage.clickStartLink();
         LoginWithPasswordCheckForm loginWithPasswordCheckForm = new LoginWithPasswordCheckForm();
-        loginWithPasswordCheckForm.acceptCookies();
-        Assert.assertFalse(loginWithPasswordCheckForm.ifCookiesFormPresent());
+        String timerState = loginWithPasswordCheckForm.getTimerState();
+        String expectedTImerState = testData.getValue("expected_timer_state").toString();
+        Assert.assertEquals(timerState, "00:00:00");
     }
 }

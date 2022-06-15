@@ -33,7 +33,6 @@ public class LoginWithPasswordCheckForm extends Form {
         domainTextBox.focus();
         domainTextBox.clearAndType(domainString);
 
-        AqualityServices.getBrowser().scrollWindowBy(0, 400);
         IComboBox dotSomethingComboBox = getElementFactory().getComboBox(By.xpath("//div[@class='dropdown__opener']"), "dot something combobox");
         int index = Integer.parseInt(dotString);
         dotSomethingComboBox.click();
@@ -74,17 +73,22 @@ public class LoginWithPasswordCheckForm extends Form {
         sendToBottomButton.click();
     }
 
-    public void waitForHelpFormContentToDisappear() {
+    public void waitForHelpFormContentToDisappear(int waitTime) {
         ILabel helpFormContent = getElementFactory().getLabel(By.className("help-form__title"), "help form content");
         AqualityServices.getConditionalWait()
                 .waitFor(
                 () -> ! helpFormContent.state().isDisplayed(),
-                Duration.ofSeconds(30));
+                Duration.ofSeconds(waitTime));
     }
 
 
     public boolean isHelpFormContentDisappear() {
         ILabel helpFormContent = getElementFactory().getLabel(By.className("help-form__title"), "help form content");
         return ! (helpFormContent.state().isDisplayed());
+    }
+
+    public String getTimerState() {
+        ILabel timerLabel = getElementFactory().getLabel(By.xpath("//div[contains(@class, 'timer')]"), "timer label");
+        return timerLabel.getText();
     }
 }

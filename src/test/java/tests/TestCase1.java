@@ -11,7 +11,8 @@ public class TestCase1 extends BaseTest {
 
     @Test
     public void test() {
-        browser.goTo("https://userinyerface.com/");
+        String mainPageUrl = testData.getValue("main_page").toString();
+        browser.goTo(mainPageUrl);
         MainPage mainPage = new MainPage();
         Assert.assertTrue(mainPage.state().waitForDisplayed());
 

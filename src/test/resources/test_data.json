@@ -1,0 +1,6 @@
+{
+  "main_page": "https://userinyerface.com/",
+  "wait_for_form_disappear": 30,
+  "expected_timer_state": "00:00:00"
+}
+
