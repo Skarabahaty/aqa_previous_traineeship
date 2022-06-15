@@ -10,6 +10,7 @@ public class TestCase1 extends BaseTest {
     @Test
     public void testName() {
         browser.goTo("https://userinyerface.com/");
+        browser.waitForPageToLoad();
         MainPage mainPage = new MainPage();
         Assert.assertTrue(mainPage.state().waitForDisplayed());
 
@@ -18,5 +19,8 @@ public class TestCase1 extends BaseTest {
         Assert.assertTrue(loginWithPasswordCheckForm.state().waitForDisplayed());
 
         loginWithPasswordCheckForm.fillForm();
+        loginWithPasswordCheckForm.acceptTerms();
+
+        loginWithPasswordCheckForm.clickNextButton();
     }
 }

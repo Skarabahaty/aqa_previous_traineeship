@@ -1,6 +1,5 @@
 package utils;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class CredentialsGenerator {
@@ -12,7 +11,7 @@ public class CredentialsGenerator {
         password.append(passwordBase);
 
         int length = email.length();
-        int charPosition = Randomizer.getRandomIntInRange(0, length);
+        int charPosition = Randomizer.getRandomIntInRange(0, length - 1);
         char charFromEmail = email.charAt(charPosition);
         password.append(charFromEmail);
 
@@ -28,12 +27,12 @@ public class CredentialsGenerator {
         return String.valueOf(password);
     }
 
-    public static HashMap<String, String> generateEmail() {
+    public static Map<String, String> generateEmail() {
         String email = Randomizer.getRandomStringLowerCase(5);
         String domain = Randomizer.getRandomStringLowerCase(3);
-        String dotSomething = String.valueOf(Randomizer.getRandomIntInRange(1, 10));
+        String dotSomething = String.valueOf(Randomizer.getRandomIntInRange(1, 9));
 
-        return (HashMap<String, String>) Map.of("email", email,
+        return Map.of("email", email,
                 "domain", domain,
                 "dot", dotSomething);
     }

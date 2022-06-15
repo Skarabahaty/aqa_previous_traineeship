@@ -7,6 +7,8 @@ import org.openqa.selenium.Dimension;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
+import java.time.Duration;
+
 public abstract class BaseTest {
 
     protected final IElementFactory elementFactory;
@@ -19,6 +21,7 @@ public abstract class BaseTest {
 
     @BeforeMethod
     protected void beforeMethod() {
+        browser.setPageLoadTimeout(Duration.ofSeconds(60));
     }
 
     @AfterMethod
