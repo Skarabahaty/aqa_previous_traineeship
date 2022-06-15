@@ -1,7 +1,11 @@
 package utils;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.IntStream;
 
 public class Randomizer {
 
@@ -26,6 +30,17 @@ public class Randomizer {
         String cyrillicCharacters = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя";
         int randomCharIndex = localRandom.nextInt(cyrillicCharacters.length());
         return String.valueOf(cyrillicCharacters.charAt(randomCharIndex));
+    }
+
+    public static Set<Integer> getThreeRandomIndexes() {
+        HashSet<Integer> integers = new HashSet<>();
+        while (integers.size() < 3) {
+            int index = localRandom.nextInt(21);
+            if (index != 17 && index != 20) {
+                integers.add(index);
+            }
+        }
+        return integers;
     }
 
     public static char getRandomCharUpperCase() {

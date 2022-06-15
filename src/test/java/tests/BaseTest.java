@@ -21,18 +21,17 @@ public abstract class BaseTest {
 
     @BeforeMethod
     protected void beforeMethod() {
-        browser.setPageLoadTimeout(Duration.ofSeconds(60));
     }
 
     @AfterMethod
-    public void afterTest() {
+    protected void afterTest() {
         if (AqualityServices.isBrowserStarted()) {
             AqualityServices.getBrowser().quit();
         }
     }
 
-
-    protected Browser getBrowser() {
-        return AqualityServices.getBrowser();
+    public void scrollABit() {
+        AqualityServices.getBrowser().scrollWindowBy(0, 200);
     }
+
 }
