@@ -21,6 +21,7 @@ public abstract class BaseTest {
 
     @BeforeMethod
     protected void beforeMethod() {
+        browser.maximize();
     }
 
     @AfterMethod

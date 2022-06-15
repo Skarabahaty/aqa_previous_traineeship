@@ -10,8 +10,7 @@ import org.testng.annotations.Test;
 public class TestCase1 extends BaseTest {
 
     @Test
-    public void testName() {
-        browser.maximize();
+    public void test() {
         browser.goTo("https://userinyerface.com/");
         MainPage mainPage = new MainPage();
         Assert.assertTrue(mainPage.state().waitForDisplayed());

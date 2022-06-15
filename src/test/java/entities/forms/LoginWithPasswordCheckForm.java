@@ -1,6 +1,7 @@
 package entities.forms;
 
 import aquality.selenium.browser.AqualityServices;
+import aquality.selenium.core.elements.ElementState;
 import aquality.selenium.elements.interfaces.*;
 import aquality.selenium.forms.Form;
 import org.openqa.selenium.By;
@@ -52,5 +53,18 @@ public class LoginWithPasswordCheckForm extends Form {
     public void clickNextButton() {
         ILink nextButton = getElementFactory().getLink(By.className("button--secondary"), "next button");
         nextButton.click();
+    }
+
+    public void acceptCookies() {
+        IButton acceptCookiesButton = getElementFactory().getButton(By.xpath("//button[text()='Not really, no']"),
+                "accept cookies button",
+                ElementState.DISPLAYED);
+        acceptCookiesButton.click();
+    }
+
+    public boolean ifCookiesFormPresent() {
+        ILabel cookiesForm = getElementFactory().getLabel(By.className("cookies"),
+                "cookies form");
+        return cookiesForm.state().isExist();
     }
 }
