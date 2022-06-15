@@ -1,17 +1,18 @@
-package tests;
+package tests.test_case;
 
-import entities.forms.InterestsForm;
-import entities.forms.LoginWithPasswordCheckForm;
-import entities.forms.MainPage;
-import entities.forms.PersonalDetailsForm;
+import forms.InterestsForm;
+import forms.LoginWithPasswordCheckForm;
+import forms.MainPage;
+import forms.PersonalDetailsForm;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import tests.BaseTest;
 
 public class TestCase1 extends BaseTest {
 
     @Test
     public void test() {
-        String mainPageUrl = testData.getValue("main_page").toString();
+        String mainPageUrl = testData.getValue("/main_page").toString();
         browser.goTo(mainPageUrl);
         MainPage mainPage = new MainPage();
         Assert.assertTrue(mainPage.state().waitForDisplayed());
@@ -22,7 +23,10 @@ public class TestCase1 extends BaseTest {
 
         scrollDownALittleBit();
 
-        loginWithPasswordCheckForm.fillForm();
+        int emailLetters = (int) configData.getValue("/email_letters");
+        int domainLetters = (int) configData.getValue("/domain_letters");
+
+        loginWithPasswordCheckForm.fillForm(emailLetters, domainLetters);
         loginWithPasswordCheckForm.acceptTerms();
         loginWithPasswordCheckForm.clickNextButton();
 
@@ -31,8 +35,14 @@ public class TestCase1 extends BaseTest {
 
         scrollDownALittleBit();
 
-        interestsForm.chooseThreeInterests();
+        int unselectAllIndex = (int) testData.getValue("/unselect_all_index");
+        int selectAllIndex = (int) testData.getValue("/select_all_index");
+
+        interestsForm.chooseThreeInterests(unselectAllIndex, selectAllIndex);
         interestsForm.downloadAvatar();
+
+        scrollDownALittleBit();
+
         interestsForm.clickNextButton();
 
         PersonalDetailsForm personalDetailsForm = new PersonalDetailsForm();

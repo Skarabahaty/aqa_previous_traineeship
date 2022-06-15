@@ -3,36 +3,34 @@ package tests;
 import aquality.selenium.browser.AqualityServices;
 import aquality.selenium.browser.Browser;
 import aquality.selenium.core.utilities.JsonSettingsFile;
-import aquality.selenium.elements.interfaces.IElementFactory;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
 public abstract class BaseTest {
 
-    protected final IElementFactory elementFactory;
-    protected final Browser browser;
+    protected Browser browser;
     protected final JsonSettingsFile testData;
+    protected final JsonSettingsFile configData;
 
     protected BaseTest() {
-        elementFactory = AqualityServices.getElementFactory();
-        browser = AqualityServices.getBrowser();
         testData = new JsonSettingsFile("test_data.json");
+        configData = new JsonSettingsFile("test_config.json");
     }
 
     @BeforeMethod
     protected void beforeMethod() {
+        browser = AqualityServices.getBrowser();
         browser.maximize();
     }
 
     @AfterMethod
     protected void afterTest() {
-        if (AqualityServices.isBrowserStarted()) {
-            AqualityServices.getBrowser().quit();
-        }
+        AqualityServices.getBrowser().quit();
     }
 
-    public void scrollDownALittleBit() {
-        AqualityServices.getBrowser().scrollWindowBy(0, 200);
+    protected void scrollDownALittleBit() {
+        int scrollPixelsAmount = (int) configData.getValue("/scroll_pixels_amount");
+        AqualityServices.getBrowser().scrollWindowBy(0, scrollPixelsAmount);
     }
 
 }

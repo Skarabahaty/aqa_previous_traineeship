@@ -27,15 +27,13 @@ public class CredentialsGenerator {
         return String.valueOf(password);
     }
 
-    public static Map<String, String> generateEmail() {
-        String email = Randomizer.getRandomStringLowerCase(5);
-        String domain = Randomizer.getRandomStringLowerCase(3);
+    public static Map<String, String> generateEmail(int emailLetters, int domainLetters) {
+        String email = Randomizer.getRandomStringLowerCase(emailLetters);
+        String domain = Randomizer.getRandomStringLowerCase(domainLetters);
         String dotSomething = String.valueOf(Randomizer.getRandomIntInRange(1, 9));
 
         return Map.of("email", email,
                 "domain", domain,
                 "dot", dotSomething);
     }
-
-
 }

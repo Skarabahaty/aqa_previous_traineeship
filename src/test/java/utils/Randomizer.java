@@ -1,11 +1,8 @@
 package utils;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.IntStream;
 
 public class Randomizer {
 
@@ -32,11 +29,11 @@ public class Randomizer {
         return String.valueOf(cyrillicCharacters.charAt(randomCharIndex));
     }
 
-    public static Set<Integer> getThreeRandomIndexes() {
+    public static Set<Integer> getThreeRandomIndexes(int selectAllIndex) {
         HashSet<Integer> integers = new HashSet<>();
         while (integers.size() < 3) {
-            int index = localRandom.nextInt(21);
-            if (index != 17 && index != 20) {
+            int index = localRandom.nextInt(20);
+            if (index != selectAllIndex) {
                 integers.add(index);
             }
         }

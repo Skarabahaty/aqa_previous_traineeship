@@ -1,4 +1,4 @@
-package entities.forms;
+package forms;
 
 import aquality.selenium.browser.AqualityServices;
 import aquality.selenium.core.elements.ElementState;
@@ -18,19 +18,16 @@ public class LoginWithPasswordCheckForm extends Form {
         super(By.xpath("//div[@class='login-form-with-pw-check']"), "login with password check form");
     }
 
-
-    public void fillForm() {
-        Map<String, String> email = CredentialsGenerator.generateEmail();
+    public void fillForm(int emailLetters, int domainLetters) {
+        Map<String, String> email = CredentialsGenerator.generateEmail(emailLetters, domainLetters);
         String emailString = email.get("email");
         String domainString = email.get("domain");
         String dotString = email.get("dot");
 
         ITextBox emailTextBox = getElementFactory().getTextBox(By.xpath("//input[@placeholder='Your email']"), "email textbox");
-        emailTextBox.focus();
         emailTextBox.clearAndType(emailString);
 
         ITextBox domainTextBox = getElementFactory().getTextBox(By.xpath("//input[@placeholder='Domain']"), "domain textbox");
-        domainTextBox.focus();
         domainTextBox.clearAndType(domainString);
 
         IComboBox dotSomethingComboBox = getElementFactory().getComboBox(By.xpath("//div[@class='dropdown__opener']"), "dot something combobox");
@@ -75,10 +72,10 @@ public class LoginWithPasswordCheckForm extends Form {
 
     public void waitForHelpFormContentToDisappear(int waitTime) {
         ILabel helpFormContent = getElementFactory().getLabel(By.className("help-form__title"), "help form content");
-        AqualityServices.getConditionalWait()
-                .waitFor(
+        AqualityServices.getConditionalWait().waitFor(
                 () -> ! helpFormContent.state().isDisplayed(),
-                Duration.ofSeconds(waitTime));
+                Duration.ofSeconds(waitTime)
+        );
     }
 
 

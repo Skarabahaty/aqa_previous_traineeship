@@ -1,6 +1,5 @@
-package entities.forms;
+package forms;
 
-import aquality.selenium.browser.AqualityServices;
 import aquality.selenium.elements.interfaces.IButton;
 import aquality.selenium.elements.interfaces.ICheckBox;
 import aquality.selenium.elements.interfaces.ILink;
@@ -22,10 +21,10 @@ public class InterestsForm extends Form {
     }
 
 
-    public void chooseThreeInterests() {
+    public void chooseThreeInterests(int unselectAllIndex, int selectAllIndex) {
         List<ICheckBox> checkBoxes = getElementFactory().findElements(By.className("checkbox__box"), ICheckBox.class);
-        checkBoxes.get(20).click(); //click unselect all
-        Set<Integer> threeRandomIndexes = Randomizer.getThreeRandomIndexes();
+        checkBoxes.get(unselectAllIndex).click();
+        Set<Integer> threeRandomIndexes = Randomizer.getThreeRandomIndexes(selectAllIndex);
         for (int randomIndex : threeRandomIndexes) {
             checkBoxes.get(randomIndex).click();
         }

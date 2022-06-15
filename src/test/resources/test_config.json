@@ -1,0 +1,6 @@
+{
+  "wait_for_form_disappear": 30,
+  "scroll_pixels_amount": 200,
+  "email_letters": 5,
+  "domain_letters": 3
+}

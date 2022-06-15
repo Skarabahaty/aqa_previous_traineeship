@@ -1,18 +1,16 @@
-package tests;
+package tests.test_case;
 
-import aquality.selenium.browser.AqualityServices;
-import aquality.selenium.elements.ElementType;
-import entities.forms.LoginWithPasswordCheckForm;
-import entities.forms.MainPage;
-import org.openqa.selenium.By;
+import forms.LoginWithPasswordCheckForm;
+import forms.MainPage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import tests.BaseTest;
 
 public class TestCase2 extends BaseTest {
 
     @Test
     public void test() {
-        String mainPageUrl = testData.getValue("main_page").toString();
+        String mainPageUrl = testData.getValue("/main_page").toString();
         browser.goTo(mainPageUrl);
         MainPage mainPage = new MainPage();
         Assert.assertTrue(mainPage.state().waitForDisplayed());
