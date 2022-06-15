@@ -7,6 +7,7 @@ import aquality.selenium.forms.Form;
 import org.openqa.selenium.By;
 import utils.CredentialsGenerator;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
@@ -66,5 +67,24 @@ public class LoginWithPasswordCheckForm extends Form {
         ILabel cookiesForm = getElementFactory().getLabel(By.className("cookies"),
                 "cookies form");
         return cookiesForm.state().isExist();
+    }
+
+    public void clickSendToBottomButton() {
+        IButton sendToBottomButton = getElementFactory().getButton(By.xpath("//button[contains(@class, 'help-form__send-to-bottom-button')]"), "send to bottom button");
+        sendToBottomButton.click();
+    }
+
+    public void waitForHelpFormContentToDisappear() {
+        ILabel helpFormContent = getElementFactory().getLabel(By.className("help-form__title"), "help form content");
+        AqualityServices.getConditionalWait()
+                .waitFor(
+                () -> ! helpFormContent.state().isDisplayed(),
+                Duration.ofSeconds(30));
+    }
+
+
+    public boolean isHelpFormContentDisappear() {
+        ILabel helpFormContent = getElementFactory().getLabel(By.className("help-form__title"), "help form content");
+        return ! (helpFormContent.state().isDisplayed());
     }
 }

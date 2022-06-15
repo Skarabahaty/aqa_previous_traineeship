@@ -3,11 +3,8 @@ package tests;
 import aquality.selenium.browser.AqualityServices;
 import aquality.selenium.browser.Browser;
 import aquality.selenium.elements.interfaces.IElementFactory;
-import org.openqa.selenium.Dimension;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
-
-import java.time.Duration;
 
 public abstract class BaseTest {
 
@@ -31,7 +28,7 @@ public abstract class BaseTest {
         }
     }
 
-    public void scrollABit() {
+    public void scrollDownALittleBit() {
         AqualityServices.getBrowser().scrollWindowBy(0, 200);
     }
 

@@ -19,7 +19,7 @@ public class TestCase1 extends BaseTest {
         LoginWithPasswordCheckForm loginWithPasswordCheckForm = new LoginWithPasswordCheckForm();
         Assert.assertTrue(loginWithPasswordCheckForm.state().waitForDisplayed());
 
-        scrollABit();
+        scrollDownALittleBit();
 
         loginWithPasswordCheckForm.fillForm();
         loginWithPasswordCheckForm.acceptTerms();
@@ -28,7 +28,7 @@ public class TestCase1 extends BaseTest {
         InterestsForm interestsForm = new InterestsForm();
         Assert.assertTrue(interestsForm.state().waitForDisplayed());
 
-        scrollABit();
+        scrollDownALittleBit();
 
         interestsForm.chooseThreeInterests();
         interestsForm.downloadAvatar();
