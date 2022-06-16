@@ -18,7 +18,7 @@ public class TestCase4 extends BaseTest {
         mainPage.clickStartLink();
         LoginWithPasswordCheckForm loginWithPasswordCheckForm = new LoginWithPasswordCheckForm();
         String actualTimerState = loginWithPasswordCheckForm.getTimerState();
-        String expectedTImerState = testData.getValue("/expected_timer_state").toString();
-        Assert.assertEquals(actualTimerState, expectedTImerState);
+        String expectedTImerStartSequence = testData.getValue("/expected_timer_start").toString();
+        Assert.assertTrue(actualTimerState.startsWith(expectedTImerStartSequence));
     }
 }
