@@ -1,6 +1,8 @@
 {
-  "wait_for_form_disappear": 30,
-  "scroll_pixels_amount": 200,
+  "main_page": "https://userinyerface.com/",
   "email_letters": 5,
-  "domain_letters": 3
+  "domain_letters": 3,
+  "picture_name": "welcome-cat.png",
+  "picture_store_directory": "src\\test\\resources",
+  "robot_delay": 2000
 }

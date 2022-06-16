@@ -1,15 +1,13 @@
 package forms;
 
-import aquality.selenium.browser.AqualityServices;
 import aquality.selenium.core.elements.ElementState;
 import aquality.selenium.elements.interfaces.*;
 import aquality.selenium.forms.Form;
 import org.openqa.selenium.By;
 import utils.CredentialsGenerator;
+import utils.Randomizer;
 
-import java.time.Duration;
 import java.util.List;
-import java.util.Map;
 
 
 public class LoginWithPasswordCheckForm extends Form {
@@ -18,74 +16,86 @@ public class LoginWithPasswordCheckForm extends Form {
         super(By.xpath("//div[@class='login-form-with-pw-check']"), "login with password check form");
     }
 
-    public void fillForm(int emailLetters, int domainLetters) {
-        Map<String, String> email = CredentialsGenerator.generateEmail(emailLetters, domainLetters);
-        String emailString = email.get("email");
-        String domainString = email.get("domain");
-        String dotString = email.get("dot");
+    private final By acceptCookiesButtonLocator = By.xpath("//button[text()='Not really, no']");
+    private final By acceptTermsCheckBoxLocator = By.xpath("//label[@for='accept-terms-conditions']");
+    private final By cookiesFormLocator = By.className("cookies");
+    private final By comboBoxElementLocator = By.xpath("//div[@class='dropdown__list-item']");
+    private final By domainTextBoxLocator = By.xpath("//input[@placeholder='Domain']");
+    private final By dotSomethingComboBoxLocator = By.xpath("//div[@class='dropdown__opener']");
+    private final By emailTextBoxLocator = By.xpath("//input[@placeholder='Your email']");
+    private final By helpFormContentLocator = By.className("help-form__title");
+    private final By nextButtonLocator = By.className("button--secondary");
+    private final By passwordTextBoxLocator = By.xpath("//input[@placeholder='Choose Password']");
+    private final By sendToBottomButtonLocator = By.xpath("//button[contains(@class, 'help-form__send-to-bottom-button')]");
+    private final By timerLabelLocator = By.xpath("//div[contains(@class, 'timer')]");
 
-        ITextBox emailTextBox = getElementFactory().getTextBox(By.xpath("//input[@placeholder='Your email']"), "email textbox");
-        emailTextBox.clearAndType(emailString);
+    private final ILabel acceptTermsCheckbox = getElementFactory().getLabel(acceptTermsCheckBoxLocator, "accept terms checkbox");
+    private final IButton acceptCookiesButton = getElementFactory().getButton(acceptCookiesButtonLocator, "accept cookies button", ElementState.DISPLAYED);
+    private final ILabel cookiesForm = getElementFactory().getLabel(cookiesFormLocator, "cookies form", ElementState.DISPLAYED);
+    private final ITextBox domainTextBox = getElementFactory().getTextBox(domainTextBoxLocator, "domain textbox");
+    private final IComboBox dotSomethingComboBox = getElementFactory().getComboBox(dotSomethingComboBoxLocator, "dot something combobox");
+    private final ITextBox emailTextBox = getElementFactory().getTextBox(emailTextBoxLocator, "email textbox");
+    private final ILabel helpFormContent = getElementFactory().getLabel(helpFormContentLocator, "help form content");
+    private final ILink nextButton = getElementFactory().getLink(nextButtonLocator, "next button");
+    private final ITextBox passwordTextBox = getElementFactory().getTextBox(passwordTextBoxLocator, "password textbox");
+    private final IButton sendToBottomButton = getElementFactory().getButton(sendToBottomButtonLocator, "send to bottom button");
+    private final ILabel timerLabel = getElementFactory().getLabel(timerLabelLocator, "timer label");
 
-        ITextBox domainTextBox = getElementFactory().getTextBox(By.xpath("//input[@placeholder='Domain']"), "domain textbox");
-        domainTextBox.clearAndType(domainString);
 
-        IComboBox dotSomethingComboBox = getElementFactory().getComboBox(By.xpath("//div[@class='dropdown__opener']"), "dot something combobox");
-        int index = Integer.parseInt(dotString);
+    public String setEmailAndReturnIt(int emailLetters) {
+        String email = CredentialsGenerator.generateEmail(emailLetters);
+        emailTextBox.clearAndType(email);
+        return email;
+    }
+
+    public void setDomain(int domainLetters) {
+        String domain = CredentialsGenerator.generateDomain(domainLetters);
+        domainTextBox.clearAndType(domain);
+    }
+
+    public void setDotSomething() {
         dotSomethingComboBox.click();
-        List<ILabel> elements = getElementFactory().findElements(By.xpath("//div[@class='dropdown__list-item']"), ILabel.class);
-        elements.get(index).click();
+        List<ILabel> comboBoxElements = getElementFactory().findElements(comboBoxElementLocator, ILabel.class);
+        int randomIndex = Randomizer.getRandomIntInRange(comboBoxElements.size());
+        comboBoxElements.get(randomIndex).click();
+    }
 
-        String password = CredentialsGenerator.generatePassword(emailString);
-        ITextBox passwordTextBox = getElementFactory().getTextBox(By.xpath("//input[@placeholder='Choose Password']"), "password textbox");
+    public void setPassword(String email) {
+        String password = CredentialsGenerator.generatePassword(email);
         passwordTextBox.clearAndType(password);
     }
 
     public void acceptTerms() {
-        ILabel acceptTermsCheckbox = getElementFactory().getLabel(By.xpath("//label[@for='accept-terms-conditions']"), "accept terms checkbox");
         acceptTermsCheckbox.click();
     }
 
-
     public void clickNextButton() {
-        ILink nextButton = getElementFactory().getLink(By.className("button--secondary"), "next button");
         nextButton.click();
     }
 
     public void acceptCookies() {
-        IButton acceptCookiesButton = getElementFactory().getButton(By.xpath("//button[text()='Not really, no']"),
-                "accept cookies button",
-                ElementState.DISPLAYED);
         acceptCookiesButton.click();
     }
 
-    public boolean ifCookiesFormPresent() {
-        ILabel cookiesForm = getElementFactory().getLabel(By.className("cookies"),
-                "cookies form");
-        return cookiesForm.state().isExist();
+    public boolean isCookiesFormDisappeared() {
+        return cookiesForm.state().waitForNotDisplayed();
     }
 
     public void clickSendToBottomButton() {
-        IButton sendToBottomButton = getElementFactory().getButton(By.xpath("//button[contains(@class, 'help-form__send-to-bottom-button')]"), "send to bottom button");
         sendToBottomButton.click();
     }
 
-    public void waitForHelpFormContentToDisappear(int waitTime) {
-        ILabel helpFormContent = getElementFactory().getLabel(By.className("help-form__title"), "help form content");
-        AqualityServices.getConditionalWait().waitFor(
-                () -> ! helpFormContent.state().isDisplayed(),
-                Duration.ofSeconds(waitTime)
-        );
+    public void waitForHelpFormContentToDisappear() {
+        helpFormContent.state().waitForNotDisplayed();
     }
 
-
-    public boolean isHelpFormContentDisappear() {
-        ILabel helpFormContent = getElementFactory().getLabel(By.className("help-form__title"), "help form content");
-        return ! (helpFormContent.state().isDisplayed());
+    public boolean isHelpFormContentDisplayed() {
+        return helpFormContent.state().isDisplayed();
     }
 
     public String getTimerState() {
-        ILabel timerLabel = getElementFactory().getLabel(By.xpath("//div[contains(@class, 'timer')]"), "timer label");
         return timerLabel.getText();
     }
+
+
 }

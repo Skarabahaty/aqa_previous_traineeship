@@ -1,10 +1,13 @@
 package utils;
 
+import constants.Constants;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Randomizer {
+
 
     private Randomizer() {
     }
@@ -12,28 +15,23 @@ public class Randomizer {
     private static final ThreadLocalRandom localRandom = ThreadLocalRandom.current();
 
     public static String getRandomStringLowerCase(int length) {
-        int leftLimit = 97; // letter 'a'
-        int rightLimit = 122; // letter 'z'
+        int smallLetterAASCIICode = Constants.SMALL_LETTER_A_ASCII_CODE;
+        int smallLetterZASCIICode = Constants.SMALL_LETTER_Z_ASCII_CODE;
+
         StringBuilder buffer = new StringBuilder(length);
         for (int i = 0; i < length; i++) {
-            int randomLimitedInt = leftLimit + (int)
-                    (localRandom.nextFloat() * (rightLimit - leftLimit + 1));
+            int randomLimitedInt = smallLetterAASCIICode +
+                    (int) (localRandom.nextFloat() * (smallLetterZASCIICode - smallLetterAASCIICode + 1));
             buffer.append((char) randomLimitedInt);
         }
         return buffer.toString();
     }
 
-    public static String getRandomCyrillicSymbol() {
-        String cyrillicCharacters = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя";
-        int randomCharIndex = localRandom.nextInt(cyrillicCharacters.length());
-        return String.valueOf(cyrillicCharacters.charAt(randomCharIndex));
-    }
-
-    public static Set<Integer> getThreeRandomIndexes(int selectAllIndex) {
+    public static Set<Integer> getRandomIndexes(int interestsNumber, int unselectAllIndex, int selectAllIndex, int interestsOverallNumber) {
         HashSet<Integer> integers = new HashSet<>();
-        while (integers.size() < 3) {
-            int index = localRandom.nextInt(20);
-            if (index != selectAllIndex) {
+        while (integers.size() < interestsNumber) {
+            int index = localRandom.nextInt(interestsOverallNumber);
+            if (index != selectAllIndex && index != unselectAllIndex) {
                 integers.add(index);
             }
         }
@@ -41,9 +39,10 @@ public class Randomizer {
     }
 
     public static char getRandomCharUpperCase() {
-        int leftLimit = 65; // letter 'A'
-        int rightLimit = 90; // letter 'Z'
-        int randomLimitedInt = leftLimit + (int) (localRandom.nextFloat() * (rightLimit - leftLimit + 1));
+        int bigLetterAASCIICode = Constants.BIG_LETTER_A_ASCII_CODE;
+        int bigLetterZASCIICode = Constants.BIG_LETTER_Z_ASCII_CODE;
+        int randomLimitedInt = bigLetterAASCIICode +
+                (int) (localRandom.nextFloat() * (bigLetterZASCIICode - bigLetterAASCIICode + 1));
         return (char) randomLimitedInt;
     }
 
@@ -51,7 +50,13 @@ public class Randomizer {
         return localRandom.nextInt(min, max + 1);
     }
 
-    public static int getRandomInt() {
+    public static int getRandomIntInRange(int max) {
+        return localRandom.nextInt(0, max + 1);
+    }
+
+    public static int getRandomIntFromZeroToNine() {
         return localRandom.nextInt(10);
     }
+
+
 }

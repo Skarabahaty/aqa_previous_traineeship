@@ -1,7 +1,5 @@
 {
-  "main_page": "https://userinyerface.com/",
   "expected_timer_start": "00:00",
-  "select_all_index": 17,
-  "unselect_all_index": 20
+  "interests_number": 3
 }
 

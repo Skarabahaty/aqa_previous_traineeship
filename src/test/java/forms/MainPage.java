@@ -6,12 +6,14 @@ import org.openqa.selenium.By;
 
 public class MainPage extends Form {
 
+    private final By startLinkLocator = By.className("start__link");
+    private final ILink startLink = getElementFactory().getLink(startLinkLocator, "start link");
+
     public MainPage() {
-        super(By.xpath("//button[@class='start__button']"), "main page");
+        super(By.className("start__button"), "main page");
     }
 
     public void clickStartLink() {
-        ILink startLink = getElementFactory().getLink(By.xpath("//a[@class='start__link']"), "start link");
         startLink.click();
     }
 }

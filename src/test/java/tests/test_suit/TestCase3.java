@@ -10,18 +10,25 @@ public class TestCase3 extends BaseTest {
 
     @Test
     public void test() {
-        String mainPageUrl = testData.getValue("/main_page").toString();
+        String mainPageUrl = configData.getValue("/main_page").toString();
+        logger.info("go to main page");
         browser.goTo(mainPageUrl);
         MainPage mainPage = new MainPage();
-        Assert.assertTrue(mainPage.state().waitForDisplayed());
+        Assert.assertTrue(mainPage.state().waitForDisplayed(),
+                "main page isn't displayed");
 
+        logger.info("click start link");
         mainPage.clickStartLink();
+
         LoginWithPasswordCheckForm loginWithPasswordCheckForm = new LoginWithPasswordCheckForm();
+
+        logger.info("click send to bottom button");
         loginWithPasswordCheckForm.clickSendToBottomButton();
 
-        int waitTime = (int) configData.getValue("/wait_for_form_disappear");
-        loginWithPasswordCheckForm.waitForHelpFormContentToDisappear(waitTime);
+        logger.info("wait for help form content to disappear");
+        loginWithPasswordCheckForm.waitForHelpFormContentToDisappear();
 
-        Assert.assertTrue(loginWithPasswordCheckForm.isHelpFormContentDisappear());
+        Assert.assertFalse(loginWithPasswordCheckForm.isHelpFormContentDisplayed(),
+                "help form content is visible");
     }
 }

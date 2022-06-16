@@ -2,64 +2,60 @@ package forms;
 
 import aquality.selenium.elements.interfaces.IButton;
 import aquality.selenium.elements.interfaces.ICheckBox;
+import aquality.selenium.elements.interfaces.ILabel;
 import aquality.selenium.elements.interfaces.ILink;
 import aquality.selenium.forms.Form;
 import org.openqa.selenium.By;
-import utils.PathProvider;
-import utils.Randomizer;
+import utils.*;
 
-import java.awt.*;
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.KeyEvent;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Set;
 
 public class InterestsForm extends Form {
 
     public InterestsForm() {
-        super(By.xpath("//div[@class='avatar-and-interests-page']"), "interests form");
+        super(By.className("avatar-and-interests-page"), "interests form");
     }
 
+    private final By checkBoxNameLocator = By.xpath("//span[@class='checkbox small']//following-sibling::span[text()]");
+    private final By checkBoxLocator = By.className("checkbox__box");
+    private final By downloadAvatarLinkLocator = By.linkText("upload");
+    private final By nextButtonLocator = By.xpath("//button[contains(text(), 'Next')]");
+    private final ILink downloadAvatarLink = getElementFactory().getLink(downloadAvatarLinkLocator, "download avatar link");
+    private final IButton nextButton = getElementFactory().getButton(nextButtonLocator, "next button");
 
-    public void chooseThreeInterests(int unselectAllIndex, int selectAllIndex) {
-        List<ICheckBox> checkBoxes = getElementFactory().findElements(By.className("checkbox__box"), ICheckBox.class);
-        checkBoxes.get(unselectAllIndex).click();
-        Set<Integer> threeRandomIndexes = Randomizer.getThreeRandomIndexes(selectAllIndex);
-        for (int randomIndex : threeRandomIndexes) {
-            checkBoxes.get(randomIndex).click();
+    public void chooseInterests(int interestsNumber) {
+
+        List<ILabel> checkBoxesNames = getElementFactory().findElements(checkBoxNameLocator, ILabel.class);
+        List<ICheckBox> checkBoxes = getElementFactory().findElements(checkBoxLocator, ICheckBox.class);
+
+        int unselectAllCheckBoxIndex = CheckBoxesProcessor.findUnselectAllCheckBoxIndex(checkBoxesNames);
+        checkBoxes.get(unselectAllCheckBoxIndex).click();
+
+        int selectAllCheckBoxIndex = CheckBoxesProcessor.findSelectAllCheckBoxIndex(checkBoxesNames);
+
+        int interestsOverallNumber = checkBoxes.size();
+        Set<Integer> randomInterests = Randomizer.getRandomIndexes(
+                interestsNumber,
+                unselectAllCheckBoxIndex,
+                selectAllCheckBoxIndex,
+                interestsOverallNumber);
+
+        for (int index : randomInterests) {
+            checkBoxes.get(index).click();
         }
     }
 
-    public void downloadAvatar() {
+    public void downloadAvatar(String avatarName, String avatarStorageFolder, int robotDelay) {
 
-        String avatarPath = PathProvider.getAvatarPath();
-        StringSelection stringSelection = new StringSelection(avatarPath);
-        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
-        ILink link = getElementFactory().getLink(By.linkText("upload"), "download avatar link");
-        link.click();
-
-        try {
-            Robot robot = new Robot();
-            robot.delay(2000);
-
-            robot.keyPress(KeyEvent.VK_CONTROL);
-            robot.keyPress(KeyEvent.VK_V);
-
-            robot.keyRelease(KeyEvent.VK_CONTROL);
-            robot.keyRelease(KeyEvent.VK_V);
-            robot.delay(1000);
-
-            robot.keyPress(KeyEvent.VK_ENTER);
-            robot.keyRelease(KeyEvent.VK_ENTER);
-
-        } catch (AWTException e) {
-            e.printStackTrace();
-        }
+        Path avatarPath = PathProvider.getPicturePath(avatarName, avatarStorageFolder);
+        downloadAvatarLink.click();
+        ClipboardUtil.setValueToClipBoard(avatarPath);
+        RobotUtil.sendImageUsingRobot(robotDelay);
     }
 
     public void clickNextButton() {
-        IButton nextButton = getElementFactory().getButton(By.xpath("//button[text()='Next']"), "next button");
-        nextButton.getMouseActions().moveMouseToElement();
         nextButton.click();
     }
 }
