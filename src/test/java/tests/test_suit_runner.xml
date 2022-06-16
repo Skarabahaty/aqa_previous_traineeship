@@ -2,22 +2,22 @@
 <suite name="User Inyerface TestCase" >
     <test name="Usual Test" >
         <classes>
-            <class name="tests.test_case.TestCase1" />
+            <class name="tests.test_suit.TestCase1" />
         </classes>
     </test>
     <test name="Element State Test" >
         <classes>
-            <class name="tests.test_case.TestCase2" />
+            <class name="tests.test_suit.TestCase2" />
         </classes>
     </test>
     <test name="Conditional Wait Test" >
         <classes>
-            <class name="tests.test_case.TestCase3" />
+            <class name="tests.test_suit.TestCase3" />
         </classes>
     </test>
     <test name="Attention Test" >
         <classes>
-            <class name="tests.test_case.TestCase4" />
+            <class name="tests.test_suit.TestCase4" />
         </classes>
     </test>
 </suite>

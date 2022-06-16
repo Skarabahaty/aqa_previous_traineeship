@@ -32,30 +32,26 @@ public class InterestsForm extends Form {
 
     public void downloadAvatar() {
 
+        String avatarPath = PathProvider.getAvatarPath();
+        StringSelection stringSelection = new StringSelection(avatarPath);
+        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
+        ILink link = getElementFactory().getLink(By.linkText("upload"), "download avatar link");
+        link.click();
+
         try {
             Robot robot = new Robot();
-
-            String avatarPath = PathProvider.getAvatarPath();
-
-            StringSelection stringSelection = new StringSelection(avatarPath);
-            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
-
-            ILink link = getElementFactory().getLink(By.linkText("upload"), "download avatar link");
-            link.click();
-
-            robot.delay(1000);
-
-            robot.keyPress(KeyEvent.VK_ENTER);
-            robot.keyRelease(KeyEvent.VK_ENTER);
+            robot.delay(2000);
 
             robot.keyPress(KeyEvent.VK_CONTROL);
             robot.keyPress(KeyEvent.VK_V);
 
             robot.keyRelease(KeyEvent.VK_CONTROL);
             robot.keyRelease(KeyEvent.VK_V);
+            robot.delay(1000);
 
             robot.keyPress(KeyEvent.VK_ENTER);
             robot.keyRelease(KeyEvent.VK_ENTER);
+
         } catch (AWTException e) {
             e.printStackTrace();
         }

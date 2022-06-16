@@ -1,4 +1,4 @@
-package tests.test_case;
+package tests.test_suit;
 
 import forms.LoginWithPasswordCheckForm;
 import forms.MainPage;
@@ -6,7 +6,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import tests.BaseTest;
 
-public class TestCase2 extends BaseTest {
+public class TestCase3 extends BaseTest {
 
     @Test
     public void test() {
@@ -17,7 +17,11 @@ public class TestCase2 extends BaseTest {
 
         mainPage.clickStartLink();
         LoginWithPasswordCheckForm loginWithPasswordCheckForm = new LoginWithPasswordCheckForm();
-        loginWithPasswordCheckForm.acceptCookies();
-        Assert.assertFalse(loginWithPasswordCheckForm.ifCookiesFormPresent());
+        loginWithPasswordCheckForm.clickSendToBottomButton();
+
+        int waitTime = (int) configData.getValue("/wait_for_form_disappear");
+        loginWithPasswordCheckForm.waitForHelpFormContentToDisappear(waitTime);
+
+        Assert.assertTrue(loginWithPasswordCheckForm.isHelpFormContentDisappear());
     }
 }

@@ -1,4 +1,4 @@
-package tests.test_case;
+package tests.test_suit;
 
 import forms.InterestsForm;
 import forms.LoginWithPasswordCheckForm;
