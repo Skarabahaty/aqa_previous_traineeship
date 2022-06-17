@@ -1,0 +1,11 @@
+{
+  "correct_get_code": 200,
+  "correct_post_code": 201,
+  "not_found_code": 404,
+  "case_1": "/posts",
+  "case_2" : "/posts/99",
+  "case_3" : "/posts/150",
+  "case_4" : "/posts",
+  "case_5" : "/users",
+  "case_6" : "/users/5"
+}
