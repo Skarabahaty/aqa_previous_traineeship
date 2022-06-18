@@ -1,42 +1,38 @@
-package tests;
+package tests.test_cases;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import models.ResponseObject;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import tests.BaseTest;
 import utils.CollectionsUtils;
+import utils.ResponseObjectProcessor;
 
 import java.util.LinkedList;
 
-public class GetAllPostsTest extends BaseTest {
+public class TestCase1 extends BaseTest {
 
     @Test
     public void testGetAllPosts() throws UnirestException {
 
         String mainPage = configData.getString("main_page");
+        String testCase = testData.getString("case_1");
+        String testPage = mainPage.concat(testCase);
+
         HttpResponse<JsonNode> jsonNodeHttpResponse =
-                Unirest.get(mainPage)
+                Unirest.get(testPage)
                         .asJson();
 
         int status = jsonNodeHttpResponse.getStatus();
         int expectedStatus = testData.getInt("correct_get_code");
-
         Assert.assertEquals(status, expectedStatus, "status isn't correct");
 
         JsonNode body = jsonNodeHttpResponse.getBody();
-        JSONArray array = body.getArray();
-
-        LinkedList<ResponseObject> responseObjects = new LinkedList<>();
-        for (int i = 0; i < array.length(); i++) {
-            JSONObject jsonObject = (JSONObject) array.get(i);
-            ResponseObject responseObject = new ResponseObject(jsonObject);
-            responseObjects.add(responseObject);
-        }
+        LinkedList<ResponseObject> responseObjects =
+                ResponseObjectProcessor.getResponseObjectsFromHTTPResponse(body);
 
         boolean isListSorted = CollectionsUtils.isListSorted(responseObjects);
         Assert.assertTrue(isListSorted, "responses not sorted by id");

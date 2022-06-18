@@ -2,6 +2,8 @@ package models;
 
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 public class ResponseObject {
 
     public ResponseObject(JSONObject jsonObject) {
@@ -31,5 +33,31 @@ public class ResponseObject {
 
     public String getBody() {
         return body;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ResponseObject that = (ResponseObject) o;
+        return userID == that.userID
+                && id == that.id
+                && title.isEmpty() == that.title.isEmpty()
+                && body.isEmpty() == that.body.isEmpty();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userID, id);
+    }
+
+    @Override
+    public String toString() {
+        return "ResponseObject{" +
+                "userID=" + userID +
+                ", id=" + id +
+                ", title='" + title + '\'' +
+                ", body='" + body + '\'' +
+                '}';
     }
 }
