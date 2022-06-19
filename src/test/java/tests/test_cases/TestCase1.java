@@ -4,7 +4,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import models.ResponseObject;
+import models.Post;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import tests.BaseTest;
@@ -31,10 +31,10 @@ public class TestCase1 extends BaseTest {
         Assert.assertEquals(status, expectedStatus, "status isn't correct");
 
         JsonNode body = jsonNodeHttpResponse.getBody();
-        LinkedList<ResponseObject> responseObjects =
+        LinkedList<Post> posts =
                 UnirestObjectsUtil.getResponseObjectsFromHTTPResponse(body);
 
-        boolean isListSorted = CollectionsUtils.isListSorted(responseObjects);
+        boolean isListSorted = CollectionsUtils.isListSorted(posts);
         Assert.assertTrue(isListSorted, "responses not sorted by id");
     }
 }

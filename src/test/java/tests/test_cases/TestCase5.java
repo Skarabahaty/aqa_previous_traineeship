@@ -7,15 +7,14 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import tests.BaseTest;
-import utils.UnirestObjectsUtil;
 
-public class TestCase3 extends BaseTest {
+public class TestCase5 extends BaseTest {
 
     @Test
-    public void testGetWrongPost() throws UnirestException {
+    public void testGetUsers() throws UnirestException {
 
         String mainPage = configData.getString("main_page");
-        String testCase = testData.getString("case_3");
+        String testCase = testData.getString("case_5");
         String testPage = mainPage.concat(testCase);
 
         HttpResponse<JsonNode> jsonNodeHttpResponse =
@@ -23,10 +22,8 @@ public class TestCase3 extends BaseTest {
                         .asJson();
 
         int status = jsonNodeHttpResponse.getStatus();
-        int expectedStatus = testData.getInt("not_found_code");
+        int expectedStatus = testData.getInt("correct_get_code");
         Assert.assertEquals(status, expectedStatus, "status isn't correct");
-
-        Assert.assertTrue(UnirestObjectsUtil.isResponseObjectEmpty(jsonNodeHttpResponse.getBody()));
 
     }
 }

@@ -5,9 +5,9 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Objects;
 
-public class ResponseObject {
+public class Post {
 
-    public ResponseObject(JSONObject jsonObject) {
+    public Post(JSONObject jsonObject) {
         this.userID = jsonObject.getInt("userId");
         this.id = jsonObject.getInt("id");
         this.title = jsonObject.getString("title");
@@ -45,7 +45,7 @@ public class ResponseObject {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ResponseObject that = (ResponseObject) o;
+        Post that = (Post) o;
         return userID == that.userID
                 && id == that.id
                 && title.isEmpty() == that.title.isEmpty()
@@ -59,7 +59,7 @@ public class ResponseObject {
 
     @Override
     public String toString() {
-        return "ResponseObject{" +
+        return "Post{" +
                 "userID=" + userID +
                 ", id=" + id +
                 ", title='" + title + '\'' +

@@ -4,7 +4,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import models.ResponseObject;
+import models.Post;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import tests.BaseTest;
@@ -30,12 +30,12 @@ public class TestCase2 extends BaseTest {
         Assert.assertEquals(status, expectedStatus, "status isn't correct");
 
         JsonNode body = jsonNodeHttpResponse.getBody();
-        LinkedList<ResponseObject> responseObjects =
+        LinkedList<Post> posts =
                 UnirestObjectsUtil.getResponseObjectsFromHTTPResponse(body);
 
-        ResponseObject actualResponseObject = responseObjects.get(0);
-        ResponseObject expectedResponseObject =
+        Post actualPost = posts.get(0);
+        Post expectedPost =
                 UnirestObjectsUtil.getResponseObjectFromTestData(testData, "case_2_post");
-        Assert.assertEquals(actualResponseObject, expectedResponseObject, "response objects aren't equal");
+        Assert.assertEquals(actualPost, expectedPost, "response objects aren't equal");
     }
 }

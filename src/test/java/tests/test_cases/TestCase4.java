@@ -4,7 +4,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import models.ResponseObject;
+import models.Post;
 import org.json.JSONObject;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -32,10 +32,10 @@ public class TestCase4 extends BaseTest {
         JsonNode responseBody = jsonNodeHttpResponse.getBody();
         JSONObject responseBodyObject = responseBody.getObject();
 
-        ResponseObject actualResponseObject = new ResponseObject(responseBodyObject);
+        Post actualPost = new Post(responseBodyObject);
 
-        ResponseObject expectedResponseObject = UnirestObjectsUtil.getRespponseObjectFromObjectForPost(objectForPost, testData);
+        Post expectedPost = UnirestObjectsUtil.getResponseObjectFromObjectForPost(objectForPost, testData);
 
-        Assert.assertEquals(expectedResponseObject, actualResponseObject);
+        Assert.assertEquals(expectedPost, actualPost);
     }
 }

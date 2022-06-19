@@ -1,15 +1,15 @@
 package utils;
 
-import models.ResponseObject;
+import models.Post;
 
 import java.util.Comparator;
 import java.util.LinkedList;
 
 public class CollectionsUtils {
 
-    public static boolean isListSorted(LinkedList<ResponseObject> list) {
+    public static boolean isListSorted(LinkedList<Post> list) {
         return list.stream()
-                .sorted(Comparator.comparingInt(ResponseObject::getId))
+                .sorted(Comparator.comparingInt(Post::getId))
                 .toList()
                 .equals(list);
     }
