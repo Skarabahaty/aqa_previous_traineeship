@@ -7,7 +7,6 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import tests.BaseTest;
-import utils.ResponseObjectGenerator;
 
 public class TestCase3 extends BaseTest {
 
@@ -26,8 +25,5 @@ public class TestCase3 extends BaseTest {
         int expectedStatus = testData.getInt("not_found_code");
         Assert.assertEquals(status, expectedStatus, "status isn't correct");
 
-        JsonNode body = jsonNodeHttpResponse.getBody();
-        boolean responseObjectAbleToGenerate = ResponseObjectGenerator.isResponseObjectAbleToGenerate(body);
-        Assert.assertFalse(responseObjectAbleToGenerate, "response object is able to generate");
     }
 }

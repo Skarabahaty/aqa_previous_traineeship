@@ -9,7 +9,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import tests.BaseTest;
 import utils.CollectionsUtils;
-import utils.ResponseObjectProcessor;
+import utils.UnirestObjectsUtil;
 
 import java.util.LinkedList;
 
@@ -32,7 +32,7 @@ public class TestCase1 extends BaseTest {
 
         JsonNode body = jsonNodeHttpResponse.getBody();
         LinkedList<ResponseObject> responseObjects =
-                ResponseObjectProcessor.getResponseObjectsFromHTTPResponse(body);
+                UnirestObjectsUtil.getResponseObjectsFromHTTPResponse(body);
 
         boolean isListSorted = CollectionsUtils.isListSorted(responseObjects);
         Assert.assertTrue(isListSorted, "responses not sorted by id");

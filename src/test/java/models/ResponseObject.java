@@ -2,6 +2,7 @@ package models;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 public class ResponseObject {
@@ -33,6 +34,11 @@ public class ResponseObject {
 
     public String getBody() {
         return body;
+    }
+
+
+    public void put(HashMap<String, Object> map) {
+
     }
 
     @Override

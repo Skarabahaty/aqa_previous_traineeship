@@ -8,7 +8,7 @@ import models.ResponseObject;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import tests.BaseTest;
-import utils.ResponseObjectProcessor;
+import utils.UnirestObjectsUtil;
 
 import java.util.LinkedList;
 
@@ -31,11 +31,11 @@ public class TestCase2 extends BaseTest {
 
         JsonNode body = jsonNodeHttpResponse.getBody();
         LinkedList<ResponseObject> responseObjects =
-                ResponseObjectProcessor.getResponseObjectsFromHTTPResponse(body);
+                UnirestObjectsUtil.getResponseObjectsFromHTTPResponse(body);
 
         ResponseObject actualResponseObject = responseObjects.get(0);
         ResponseObject expectedResponseObject =
-                ResponseObjectProcessor.getResponseObjectFromTestData(testData, "case_2_post");
+                UnirestObjectsUtil.getResponseObjectFromTestData(testData, "case_2_post");
         Assert.assertEquals(actualResponseObject, expectedResponseObject, "response objects aren't equal");
     }
 }
