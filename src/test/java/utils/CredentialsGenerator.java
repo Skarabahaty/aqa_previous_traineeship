@@ -2,10 +2,10 @@ package utils;
 
 public class CredentialsGenerator {
 
-    public static String generatePassword(String email) {
+    public static String generatePassword(String email, int lettersAmount) {
         StringBuilder password = new StringBuilder();
 
-        String passwordBase = Randomizer.getRandomStringLowerCase(8);
+        String passwordBase = Randomizer.getRandomStringLowerCase(lettersAmount);
         password.append(passwordBase);
 
         int charPosition = Randomizer.getRandomIntInRange(0, email.length() - 1);

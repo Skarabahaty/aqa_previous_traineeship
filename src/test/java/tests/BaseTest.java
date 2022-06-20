@@ -13,11 +13,13 @@ public abstract class BaseTest {
     protected final org.slf4j.Logger logger;
     protected final JsonSettingsFile testData;
     protected final JsonSettingsFile configData;
+    protected int stepCounter;
 
     protected BaseTest() {
         testData = new JsonSettingsFile("test_data.json");
         configData = new JsonSettingsFile("test_config.json");
         logger = LoggerFactory.getLogger(BaseTest.class);
+        stepCounter = 1;
     }
 
     @BeforeMethod
@@ -29,5 +31,10 @@ public abstract class BaseTest {
     @AfterMethod
     protected void afterTest() {
         AqualityServices.getBrowser().quit();
+    }
+
+    protected void logStep(String description) {
+        String message = String.format("Step %d: %s", stepCounter++, description);
+        logger.info(message);
     }
 }

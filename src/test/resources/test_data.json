@@ -1,5 +1,7 @@
 {
   "expected_timer_start": "00:00",
-  "interests_number": 3
+  "interests_number": 3,
+  "unselect_all_text": "Unselect all",
+  "select_all_text": "Select all"
 }
 

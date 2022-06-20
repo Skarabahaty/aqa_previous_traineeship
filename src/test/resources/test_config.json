@@ -1,7 +1,8 @@
 {
   "main_page": "https://userinyerface.com/",
-  "email_letters": 5,
-  "domain_letters": 3,
+  "password_length": 8,
+  "email_length": 5,
+  "domain_length": 3,
   "picture_name": "welcome-cat.png",
   "picture_store_directory": "src\\test\\resources",
   "robot_delay": 2000

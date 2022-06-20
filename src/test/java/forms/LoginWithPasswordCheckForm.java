@@ -4,8 +4,6 @@ import aquality.selenium.core.elements.ElementState;
 import aquality.selenium.elements.interfaces.*;
 import aquality.selenium.forms.Form;
 import org.openqa.selenium.By;
-import utils.CredentialsGenerator;
-import utils.Randomizer;
 
 import java.util.List;
 
@@ -42,26 +40,24 @@ public class LoginWithPasswordCheckForm extends Form {
     private final ILabel timerLabel = getElementFactory().getLabel(timerLabelLocator, "timer label");
 
 
-    public String setEmailAndReturnIt(int emailLetters) {
-        String email = CredentialsGenerator.generateEmail(emailLetters);
+    public void setEmail(String email) {
         emailTextBox.clearAndType(email);
-        return email;
     }
 
-    public void setDomain(int domainLetters) {
-        String domain = CredentialsGenerator.generateDomain(domainLetters);
+    public void setDomain(String domain) {
         domainTextBox.clearAndType(domain);
     }
 
-    public void setDotSomething() {
+    public void clickDotSomethingComboBox() {
         dotSomethingComboBox.click();
-        List<ILabel> comboBoxElements = getElementFactory().findElements(comboBoxElementLocator, ILabel.class);
-        int randomIndex = Randomizer.getRandomIntInRange(comboBoxElements.size());
-        comboBoxElements.get(randomIndex).click();
     }
 
-    public void setPassword(String email) {
-        String password = CredentialsGenerator.generatePassword(email);
+    public void setDotSomething(int index) {
+        List<ILabel> comboBoxElements = getElementFactory().findElements(comboBoxElementLocator, ILabel.class);
+        comboBoxElements.get(index).click();
+    }
+
+    public void setPassword(String password) {
         passwordTextBox.clearAndType(password);
     }
 
@@ -97,5 +93,8 @@ public class LoginWithPasswordCheckForm extends Form {
         return timerLabel.getText();
     }
 
-
+    public int getComboBoxOptionsAmount() {
+        List<ILabel> comboBoxElements = getElementFactory().findElements(comboBoxElementLocator, ILabel.class);
+        return comboBoxElements.size();
+    }
 }

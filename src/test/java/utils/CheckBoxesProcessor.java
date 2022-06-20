@@ -6,28 +6,16 @@ import java.util.List;
 
 public class CheckBoxesProcessor {
 
-    public static int findUnselectAllCheckBoxIndex(List<ILabel> checkBoxesNames) {
+    public static int findCheckBoxIndexByName(List<ILabel> checkBoxesNames, String searchedText) {
 
         for (int i = 0; i < checkBoxesNames.size(); i++) {
             String checkBoxText = checkBoxesNames.get(i).getText();
-            if (checkBoxText.contains("Unselect all")) {
+            if (checkBoxText.contains(searchedText)) {
                 return i;
             }
         }
-
-        throw new RuntimeException("No element with given text");
-    }
-
-    public static int findSelectAllCheckBoxIndex(List<ILabel> checkBoxesNames) {
-
-        for (int i = 0; i < checkBoxesNames.size(); i++) {
-            String checkBoxText = checkBoxesNames.get(i).getText();
-            if (checkBoxText.contains("Select all")) {
-                return i;
-            }
-        }
-
-        throw new RuntimeException("No element with given text");
+        String exceptionMessage = String.format("No element with given text, expected text: %s", searchedText);
+        throw new RuntimeException(exceptionMessage);
     }
 
 }

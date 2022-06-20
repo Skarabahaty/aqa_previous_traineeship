@@ -6,11 +6,8 @@ import aquality.selenium.elements.interfaces.ILabel;
 import aquality.selenium.elements.interfaces.ILink;
 import aquality.selenium.forms.Form;
 import org.openqa.selenium.By;
-import utils.*;
 
-import java.nio.file.Path;
 import java.util.List;
-import java.util.Set;
 
 public class InterestsForm extends Form {
 
@@ -19,40 +16,28 @@ public class InterestsForm extends Form {
     }
 
     private final By checkBoxNameLocator = By.xpath("//span[@class='checkbox small']//following-sibling::span[text()]");
+    private final List<ILabel> checkBoxesNames = getElementFactory().findElements(checkBoxNameLocator, ILabel.class);
     private final By checkBoxLocator = By.className("checkbox__box");
+    private final List<ICheckBox> checkBoxes = getElementFactory().findElements(checkBoxLocator, ICheckBox.class);
     private final By downloadAvatarLinkLocator = By.linkText("upload");
     private final By nextButtonLocator = By.xpath("//button[contains(text(), 'Next')]");
     private final ILink downloadAvatarLink = getElementFactory().getLink(downloadAvatarLinkLocator, "download avatar link");
     private final IButton nextButton = getElementFactory().getButton(nextButtonLocator, "next button");
 
-    public void chooseInterests(int interestsNumber) {
-
-        List<ILabel> checkBoxesNames = getElementFactory().findElements(checkBoxNameLocator, ILabel.class);
-        List<ICheckBox> checkBoxes = getElementFactory().findElements(checkBoxLocator, ICheckBox.class);
-
-        int unselectAllCheckBoxIndex = CheckBoxesProcessor.findUnselectAllCheckBoxIndex(checkBoxesNames);
-        checkBoxes.get(unselectAllCheckBoxIndex).click();
-
-        int selectAllCheckBoxIndex = CheckBoxesProcessor.findSelectAllCheckBoxIndex(checkBoxesNames);
-
-        int interestsOverallNumber = checkBoxes.size();
-        Set<Integer> randomInterests = Randomizer.getRandomIndexes(
-                interestsNumber,
-                unselectAllCheckBoxIndex,
-                selectAllCheckBoxIndex,
-                interestsOverallNumber);
-
-        for (int index : randomInterests) {
-            checkBoxes.get(index).click();
-        }
+    public void clickCheckBoxByIndex(int index) {
+        checkBoxes.get(index).click();
     }
 
-    public void downloadAvatar(String avatarName, String avatarStorageFolder, int robotDelay) {
+    public List<ILabel> getCheckBoxesNames() {
+        return checkBoxesNames;
+    }
 
-        Path avatarPath = PathProvider.getPicturePath(avatarName, avatarStorageFolder);
+    public List<ICheckBox> getCheckBoxes() {
+        return checkBoxes;
+    }
+
+    public void clickDownloadAvatarLink() {
         downloadAvatarLink.click();
-        ClipboardUtil.setValueToClipBoard(avatarPath);
-        RobotUtil.sendImageUsingRobot(robotDelay);
     }
 
     public void clickNextButton() {
