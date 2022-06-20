@@ -1,9 +1,11 @@
 package utils;
 
+import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import data.ConfigData;
 import data.TestData;
 import models.Post;
+import models.user.User;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -12,8 +14,9 @@ import java.util.LinkedList;
 
 public class UnirestObjectsUtil {
 
-    public static LinkedList<Post> getResponseObjectsFromHTTPResponse(JsonNode responseBody) {
-        JSONArray array = responseBody.getArray();
+    public static LinkedList<Post> getPostsFromHTTPResponse(HttpResponse<JsonNode> jsonNodeHttpResponse) {
+        JsonNode body = jsonNodeHttpResponse.getBody();
+        JSONArray array = body.getArray();
         LinkedList<Post> posts = new LinkedList<>();
         for (int i = 0; i < array.length(); i++) {
             JSONObject jsonObject = (JSONObject) array.get(i);
@@ -23,13 +26,13 @@ public class UnirestObjectsUtil {
         return posts;
     }
 
-    public static Post getResponseObjectFromTestData(TestData testData, String key) {
+    public static Post getPostFromTestData(TestData testData, String key) {
 
-        JSONObject testObject = (JSONObject) testData.getTestObject(key);
+        JSONObject testObject = (JSONObject) testData.getObject(key);
         return new Post(testObject);
     }
 
-    public static boolean isResponseObjectEmpty(JsonNode responseBody) {
+    public static boolean isPostEmpty(JsonNode responseBody) {
         JSONArray array = responseBody.getArray();
         JSONObject jsonObject = (JSONObject) array.get(0);
         return jsonObject.length() == 0;
@@ -51,7 +54,7 @@ public class UnirestObjectsUtil {
         return map;
     }
 
-    public static Post getResponseObjectFromObjectForPost(HashMap<String, Object> objectForPost, TestData testData) {
+    public static Post getPostFromObjectForPost(HashMap<String, Object> objectForPost, TestData testData) {
         Object title = objectForPost.get("title");
         Object body = objectForPost.get("body");
         Object userId = objectForPost.get("userId");
@@ -64,5 +67,26 @@ public class UnirestObjectsUtil {
         jsonObject.put("id", case4Id);
 
         return new Post(jsonObject);
+    }
+
+    public static LinkedList<User> getUsersFromResponse(HttpResponse<JsonNode> jsonNodeHttpResponse) {
+        JsonNode body = jsonNodeHttpResponse.getBody();
+        JSONArray array = body.getArray();
+        LinkedList<User> users = new LinkedList<>();
+        for (int i = 0; i < array.length(); i++) {
+            JSONObject jsonObject = (JSONObject) array.get(i);
+            User user = new User(jsonObject);
+            users.add(user);
+        }
+        return users;
+    }
+
+    public static User getUserFromListById(LinkedList<User> users, int id) {
+        for (User user : users) {
+            if (user.getId() == id) {
+                return user;
+            }
+        }
+        return null;
     }
 }

@@ -29,13 +29,12 @@ public class TestCase2 extends BaseTest {
         int expectedStatus = testData.getInt("correct_get_code");
         Assert.assertEquals(status, expectedStatus, "status isn't correct");
 
-        JsonNode body = jsonNodeHttpResponse.getBody();
         LinkedList<Post> posts =
-                UnirestObjectsUtil.getResponseObjectsFromHTTPResponse(body);
+                UnirestObjectsUtil.getPostsFromHTTPResponse(jsonNodeHttpResponse);
 
         Post actualPost = posts.get(0);
         Post expectedPost =
-                UnirestObjectsUtil.getResponseObjectFromTestData(testData, "case_2_post");
+                UnirestObjectsUtil.getPostFromTestData(testData, "case_2_post");
         Assert.assertEquals(actualPost, expectedPost, "response objects aren't equal");
     }
 }

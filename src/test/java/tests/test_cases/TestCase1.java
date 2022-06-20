@@ -30,9 +30,7 @@ public class TestCase1 extends BaseTest {
         int expectedStatus = testData.getInt("correct_get_code");
         Assert.assertEquals(status, expectedStatus, "status isn't correct");
 
-        JsonNode body = jsonNodeHttpResponse.getBody();
-        LinkedList<Post> posts =
-                UnirestObjectsUtil.getResponseObjectsFromHTTPResponse(body);
+        LinkedList<Post> posts = UnirestObjectsUtil.getPostsFromHTTPResponse(jsonNodeHttpResponse);
 
         boolean isListSorted = CollectionsUtils.isListSorted(posts);
         Assert.assertTrue(isListSorted, "responses not sorted by id");

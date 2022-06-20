@@ -34,7 +34,7 @@ public class TestCase4 extends BaseTest {
 
         Post actualPost = new Post(responseBodyObject);
 
-        Post expectedPost = UnirestObjectsUtil.getResponseObjectFromObjectForPost(objectForPost, testData);
+        Post expectedPost = UnirestObjectsUtil.getPostFromObjectForPost(objectForPost, testData);
 
         Assert.assertEquals(expectedPost, actualPost);
     }

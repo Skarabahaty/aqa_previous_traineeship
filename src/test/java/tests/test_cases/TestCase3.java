@@ -26,7 +26,7 @@ public class TestCase3 extends BaseTest {
         int expectedStatus = testData.getInt("not_found_code");
         Assert.assertEquals(status, expectedStatus, "status isn't correct");
 
-        Assert.assertTrue(UnirestObjectsUtil.isResponseObjectEmpty(jsonNodeHttpResponse.getBody()));
+        Assert.assertTrue(UnirestObjectsUtil.isPostEmpty(jsonNodeHttpResponse.getBody()));
 
     }
 }

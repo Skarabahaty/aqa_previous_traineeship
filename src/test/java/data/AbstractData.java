@@ -19,7 +19,7 @@ public abstract class AbstractData {
         return (String) data.get(key);
     }
 
-    public Object getTestObject(String key) {
+    public Object getObject(String key) {
         return data.get(key);
     }
 }
