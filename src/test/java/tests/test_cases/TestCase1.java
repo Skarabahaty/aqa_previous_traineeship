@@ -1,37 +1,32 @@
 package tests.test_cases;
 
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import models.Post;
+import org.apache.http.HttpStatus;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import tests.BaseTest;
 import utils.CollectionsUtils;
-import utils.UnirestObjectsUtil;
-
-import java.util.LinkedList;
 
 public class TestCase1 extends BaseTest {
 
     @Test
-    public void testGetAllPosts() throws UnirestException {
+    public void testGetAllPosts()  {
 
-        String testCaseData = testData.getString("case_1");
-        testPageURL.append(testCaseData);
+        logStep("set url");
+        String url = setUrl(configData.getString("posts"));
 
-        HttpResponse<JsonNode> jsonNodeHttpResponse =
-                Unirest.get(String.valueOf(testPageURL))
-                        .asJson();
+        logStep("get posts");
+        Post[] posts = session.getAsObject(url, Post[].class);
 
-        int status = jsonNodeHttpResponse.getStatus();
-        int expectedStatus = testData.getInt("correct_get_code");
-        Assert.assertEquals(status, expectedStatus, "status isn't correct");
+        logStep("get session status");
+        int actualStatus = session.getStatus();
+        int expectedStatus = HttpStatus.SC_OK;
 
-        LinkedList<Post> posts = UnirestObjectsUtil.getPostsFromHTTPResponse(jsonNodeHttpResponse);
+        logStep("compare actual and expected session status");
+        Assert.assertEquals(actualStatus, expectedStatus, "status isn't correct");
 
-        boolean isListSorted = CollectionsUtils.isListSortedAscending(posts);
+        logStep("check if posts sorted by id");
+        boolean isListSorted = CollectionsUtils.isArraySortedAscending(posts);
         Assert.assertTrue(isListSorted, "responses not sorted by id");
     }
 }

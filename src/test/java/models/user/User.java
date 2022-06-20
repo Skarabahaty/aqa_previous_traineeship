@@ -1,33 +1,89 @@
 package models.user;
 
-import org.json.JSONObject;
-
+import java.util.HashMap;
 import java.util.Objects;
 
-public class User {
+public class User  {
 
-    public User(JSONObject jsonObject) {
-        this.website = jsonObject.getString("website");
-        this.phone = jsonObject.getString("phone");
-        this.name = jsonObject.getString("name");
-        this.id = jsonObject.getInt("id");
-        this.email = jsonObject.getString("email");
-        this.username = jsonObject.getString("username");
-        this.adress = new Adress(jsonObject.getJSONObject("address"));
-        this.company = new Company(jsonObject.getJSONObject("company"));
+
+    private String website;
+    private String phone;
+    private String name;
+    private int id;
+    private String email;
+    private String username;
+    private Address address;
+    private Company company;
+
+    public User() {
     }
 
-    private final String website;
-    private final String phone;
-    private final String name;
-    private final int id;
-    private final String email;
-    private final String username;
-    private final Adress adress;
-    private final Company company;
+    public User(Object userObject) {
+        HashMap<String, Object> map = (HashMap<String, Object>) userObject;
+        website = (String) map.getOrDefault("website", null);
+        phone = (String) map.getOrDefault("phone", null);
+        name = (String) map.getOrDefault("name", null);
+        id = (int) (long) map.getOrDefault("id", null);
+        email = (String) map.getOrDefault("email", null);
+        username = (String) map.getOrDefault("username", null);
+        setAddress(map.getOrDefault("address", null));
+        setCompany(map.getOrDefault("company", null));
+    }
 
     public int getId() {
         return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+    public void setAddress(Object address) {
+        this.address = new Address(address);
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+    public void setCompany(Object company) {
+        this.company = new Company(company);
     }
 
     @Override
@@ -41,12 +97,26 @@ public class User {
                 name.equals(user.name) &&
                 email.equals(user.email) &&
                 username.equals(user.username) &&
-                adress.equals(user.adress) &&
+                address.equals(user.address) &&
                 company.equals(user.company);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(website, phone, name, id, email, username, adress, company);
+        return Objects.hash(website, phone, name, id, email, username, address, company);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "website='" + website + '\'' +
+                ", phone='" + phone + '\'' +
+                ", name='" + name + '\'' +
+                ", id=" + id +
+                ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
+                ", address=" + address +
+                ", company=" + company +
+                '}';
     }
 }

@@ -1,11 +1,7 @@
 package tests.test_cases;
 
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import models.Post;
-import org.json.JSONObject;
+import org.apache.http.HttpStatus;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import tests.BaseTest;
@@ -16,25 +12,28 @@ import java.util.HashMap;
 public class TestCase4 extends BaseTest {
 
     @Test
-    public void testPost() throws UnirestException {
+    public void testPostPost()  {
 
-        String testCaseData = testData.getString("case_4");
-        testPageURL.append(testCaseData);
+        logStep("set url");
+        String url = setUrl(configData.getString("posts"));
 
+        logStep("get object for post from test data");
         HashMap<String, Object> objectForPost = UnirestObjectsUtil.getObjectForPost(configData, testData);
 
-        HttpResponse<JsonNode> jsonNodeHttpResponse =
-                Unirest.post(String.valueOf(testPageURL))
-                        .fields(objectForPost)
-                        .asJson();
+        logStep("post acquired post");
+        Post actualPost = session.post(url, objectForPost, Post.class);
 
-        JsonNode responseBody = jsonNodeHttpResponse.getBody();
-        JSONObject responseBodyObject = responseBody.getObject();
+        logStep("get session status");
+        int actualStatus = session.getStatus();
+        int expectedStatus = HttpStatus.SC_CREATED;
 
-        Post actualPost = new Post(responseBodyObject);
+        logStep("compare actual and expected session status");
+        Assert.assertEquals(actualStatus, expectedStatus, "status isn't correct");
 
-        Post expectedPost = UnirestObjectsUtil.getPostFromObjectForPost(objectForPost, testData);
+        logStep("get post from test data");
+        Post expectedPost = new Post(objectForPost);
 
-        Assert.assertEquals(expectedPost, actualPost);
+        logStep("compare actual and expected post");
+        Assert.assertEquals(expectedPost, actualPost, "posts aren't equal");
     }
 }

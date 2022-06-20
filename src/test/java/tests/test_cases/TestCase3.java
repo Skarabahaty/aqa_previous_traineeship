@@ -1,9 +1,7 @@
 package tests.test_cases;
 
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
+import models.Post;
+import org.apache.http.HttpStatus;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import tests.BaseTest;
@@ -12,19 +10,22 @@ import utils.UnirestObjectsUtil;
 public class TestCase3 extends BaseTest {
 
     @Test
-    public void testGetWrongPost() throws UnirestException {
+    public void testGetWrongPost()  {
+        logStep("set url");
+        String url = setUrl(configData.getString("posts"),
+                testData.getString("case_3_needed_id"));
 
-        String testCaseData = testData.getString("case_3");
-        testPageURL.append(testCaseData);
+        logStep("get post");
+        Post post = session.getAsObject(url, Post.class);
 
-        HttpResponse<JsonNode> jsonNodeHttpResponse =
-                Unirest.get(String.valueOf(testPageURL))
-                        .asJson();
+        logStep("get session status");
+        int actualStatus = session.getStatus();
+        int expectedStatus = HttpStatus.SC_NOT_FOUND;
 
-        int status = jsonNodeHttpResponse.getStatus();
-        int expectedStatus = testData.getInt("not_found_code");
-        Assert.assertEquals(status, expectedStatus, "status isn't correct");
+        logStep("compare actual and expected session status");
+        Assert.assertEquals(actualStatus, expectedStatus, "status isn't correct");
 
-        Assert.assertTrue(UnirestObjectsUtil.isPostEmpty(jsonNodeHttpResponse));
+        logStep("check if post empty");
+        Assert.assertTrue(UnirestObjectsUtil.isPostEmpty(post), "post is empty");
     }
 }

@@ -1,13 +1,15 @@
 package models.user;
 
-import org.json.JSONObject;
-
+import java.util.HashMap;
 import java.util.Objects;
 
 public class Geo {
-    public Geo(JSONObject geo) {
-        this.lng = geo.getString("lng");
-        this.lat = geo.getString("lat");
+
+
+    public Geo(Object geo) {
+        HashMap<String, String> map = (HashMap<String, String>) geo;
+        lng = map.getOrDefault("lng", null);
+        lat = map.getOrDefault("lat", null);
     }
 
     private final String lng;
@@ -25,5 +27,13 @@ public class Geo {
     @Override
     public int hashCode() {
         return Objects.hash(lng, lat);
+    }
+
+    @Override
+    public String toString() {
+        return "Geo{" +
+                "lng='" + lng + '\'' +
+                ", lat='" + lat + '\'' +
+                '}';
     }
 }

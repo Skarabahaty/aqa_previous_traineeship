@@ -1,108 +1,46 @@
 package utils;
 
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
 import data.ConfigData;
 import data.TestData;
 import models.Post;
 import models.user.User;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
 
 public class UnirestObjectsUtil {
 
-    public static LinkedList<Post> getPostsFromHTTPResponse(HttpResponse<JsonNode> jsonNodeHttpResponse) {
-        JsonNode body = jsonNodeHttpResponse.getBody();
-        JSONArray array = body.getArray();
-        LinkedList<Post> posts = new LinkedList<>();
-        for (int i = 0; i < array.length(); i++) {
-            JSONObject jsonObject = (JSONObject) array.get(i);
-            Post post = new Post(jsonObject);
-            posts.add(post);
-        }
-        return posts;
-    }
-
     public static Post getPostFromTestData(TestData testData, String key) {
 
-        JSONObject testObject = (JSONObject) testData.getObject(key);
-        return new Post(testObject);
+        Object object = testData.getObject(key);
+        return new Post(object);
     }
 
-    public static boolean isPostEmpty(HttpResponse<JsonNode> json) {
-        JsonNode body = json.getBody();
-        JSONArray array = body.getArray();
-        int firstIndex = 0;
-        JSONObject jsonObject = (JSONObject) array.get(firstIndex);
-        return jsonObject.length() == 0;
+    public static boolean isPostEmpty(Post post) {
+        return post.getId() == 0
+                && post.getUserID() == 0
+                && post.getBody() == null
+                && post.getTitle() == null;
     }
 
     public static HashMap<String, Object> getObjectForPost(ConfigData configData, TestData testData) {
-        int userId = testData.getInt("case_4_user_id");
+        HashMap<String, Object> map = (HashMap<String, Object>) testData.getObject("case_4_post");
 
         int stringLength = configData.getInt("random_string_length");
+
         String title = Randomizer.getRandomStringLowerCase(stringLength);
         String body = Randomizer.getRandomStringLowerCase(stringLength);
-
-        HashMap<String, Object> map = new HashMap<>();
-
         map.put("title", title);
         map.put("body", body);
-        map.put("userId", userId);
 
         return map;
     }
 
-    public static Post getPostFromObjectForPost(HashMap<String, Object> objectForPost, TestData testData) {
-        Object title = objectForPost.get("title");
-        Object body = objectForPost.get("body");
-        Object userId = objectForPost.get("userId");
-        int case4Id = testData.getInt("case_4_id");
 
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("title", title);
-        jsonObject.put("body", body);
-        jsonObject.put("userId", userId);
-        jsonObject.put("id", case4Id);
-
-        return new Post(jsonObject);
+    public static User getUserById(User[] users, int id) {
+        return Arrays.stream(users).
+                filter(user -> user.getId() == id).
+                findFirst().
+                orElse(null);
     }
-
-    public static LinkedList<User> getUsersFromResponse(HttpResponse<JsonNode> jsonNodeHttpResponse) {
-        JsonNode body = jsonNodeHttpResponse.getBody();
-        JSONArray array = body.getArray();
-        LinkedList<User> users = new LinkedList<>();
-        for (int i = 0; i < array.length(); i++) {
-            JSONObject jsonObject = (JSONObject) array.get(i);
-            User user = new User(jsonObject);
-            users.add(user);
-        }
-        return users;
-    }
-
-    public static User getUserById(LinkedList<User> users, int id) {
-        User result = null;
-        for (User user : users) {
-            if (user.getId() == id) {
-                result = user;
-                break;
-            }
-        }
-        return result;
-    }
-
-    public static Post getPostById(LinkedList<Post> posts, int id) {
-        Post result = null;
-        for (Post post : posts) {
-            if (post.getId() == id) {
-                result = post;
-                break;
-            }
-        }
-        return result;
-    }
-
 }

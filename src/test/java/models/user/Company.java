@@ -1,19 +1,23 @@
 package models.user;
 
-import org.json.JSONObject;
-
+import java.util.HashMap;
 import java.util.Objects;
 
 public class Company {
-    public Company(JSONObject jsonObject) {
-        this.bs = jsonObject.getString("bs");
-        this.catchPhrase = jsonObject.getString("catchPhrase");
-        this.name = jsonObject.getString("name");
+
+
+    public Company(Object company) {
+
+        HashMap<String, Object> map = (HashMap<String, Object>) company;
+        bs = (String) map.getOrDefault("bs", null);
+        catchPhrase = (String) map.getOrDefault("catchPhrase", null);
+        name = (String) map.getOrDefault("name", null);
     }
 
     private final String bs;
     private final String catchPhrase;
     private final String name;
+
 
     @Override
     public boolean equals(Object o) {
@@ -28,5 +32,14 @@ public class Company {
     @Override
     public int hashCode() {
         return Objects.hash(bs, catchPhrase, name);
+    }
+
+    @Override
+    public String toString() {
+        return "Company{" +
+                "bs='" + bs + '\'' +
+                ", catchPhrase='" + catchPhrase + '\'' +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

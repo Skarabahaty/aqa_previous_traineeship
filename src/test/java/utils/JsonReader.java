@@ -1,7 +1,7 @@
 package utils;
 
-import org.json.JSONObject;
-import org.json.JSONTokener;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -29,10 +29,7 @@ public class JsonReader {
                         new FileReader(path.toFile())
                 )
         ) {
-            JSONTokener jsonTokener = new JSONTokener(bufferedReader);
-            while (jsonTokener.more()) {
-                jsonObject = (JSONObject) jsonTokener.nextValue();
-            }
+            jsonObject = (JSONObject) JSONValue.parse(bufferedReader);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -40,7 +37,8 @@ public class JsonReader {
         Set<String> set = jsonObject.keySet();
 
         for (String key : set) {
-            returnHashMap.put(key, jsonObject.get(key));
+            Object value = jsonObject.get(key);
+            returnHashMap.put(key, value);
         }
         return returnHashMap;
     }

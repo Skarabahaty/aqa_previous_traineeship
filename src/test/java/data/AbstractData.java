@@ -12,7 +12,7 @@ public abstract class AbstractData {
     }
 
     public int getInt(String key) {
-        return (int) data.get(key);
+        return (int) (long) data.get(key);
     }
 
     public String getString(String key) {

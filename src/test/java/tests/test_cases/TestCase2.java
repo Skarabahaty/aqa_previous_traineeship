@@ -1,39 +1,35 @@
 package tests.test_cases;
 
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import models.Post;
+import org.apache.http.HttpStatus;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import tests.BaseTest;
 import utils.UnirestObjectsUtil;
 
-import java.util.LinkedList;
-
 public class TestCase2 extends BaseTest {
 
     @Test
-    public void testGetOnePost() throws UnirestException {
+    public void testGetOnePost()  {
+        String neededId = testData.getString("case_2_needed_id");
 
-        String testCaseData = testData.getString("case_2");
-        testPageURL.append(testCaseData);
+        logStep("set url");
+        String url = setUrl(configData.getString("posts"), neededId);
 
-        HttpResponse<JsonNode> jsonNodeHttpResponse =
-                Unirest.get(String.valueOf(testPageURL))
-                        .asJson();
+        logStep("get post");
+        Post actualPost = session.getAsObject(url, Post.class);
 
-        int status = jsonNodeHttpResponse.getStatus();
-        int expectedStatus = testData.getInt("correct_get_code");
-        Assert.assertEquals(status, expectedStatus, "status isn't correct");
+        logStep("get session status");
+        int actualStatus = session.getStatus();
+        int expectedStatus = HttpStatus.SC_OK;
 
-        LinkedList<Post> posts = UnirestObjectsUtil.getPostsFromHTTPResponse(jsonNodeHttpResponse);
-        int neededId = testData.getInt("case_2_id");
+        logStep("compare actual and expected session status");
+        Assert.assertEquals(actualStatus, expectedStatus, "status isn't correct");
 
-        Post actualPost = UnirestObjectsUtil.getPostById(posts, neededId);
-        Post expectedPost =
-                UnirestObjectsUtil.getPostFromTestData(testData, "case_2_post");
+        logStep("get post from test data");
+        Post expectedPost = UnirestObjectsUtil.getPostFromTestData(testData, "case_2_post");
+
+        logStep("compare actual and expected post");
         Assert.assertEquals(actualPost, expectedPost, "response objects aren't equal");
     }
 }

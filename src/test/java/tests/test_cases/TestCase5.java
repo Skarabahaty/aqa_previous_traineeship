@@ -1,42 +1,42 @@
 package tests.test_cases;
 
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import models.user.User;
-import org.json.JSONObject;
+import org.apache.http.HttpStatus;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import tests.BaseTest;
 import utils.UnirestObjectsUtil;
 
-import java.util.LinkedList;
-
 public class TestCase5 extends BaseTest {
 
     @Test
-    public void testGetUsers() throws UnirestException {
+    public void testGetUsers() {
+        logStep("set url");
+        String url = setUrl(configData.getString("users"));
 
-        String testCaseData = testData.getString("case_5");
-        testPageURL.append(testCaseData);
+        logStep("get users");
+        User[] users = session.getAsObject(url, User[].class);
 
-        HttpResponse<JsonNode> jsonNodeHttpResponse =
-                Unirest.get(String.valueOf(testPageURL))
-                        .asJson();
+        logStep("get session status");
+        int actualStatus = session.getStatus();
+        int expectedStatus = HttpStatus.SC_OK;
 
-        int status = jsonNodeHttpResponse.getStatus();
-        int expectedStatus = testData.getInt("correct_get_code");
-        Assert.assertEquals(status, expectedStatus, "status isn't correct");
+        logStep("compare actual and expected session status");
+        Assert.assertEquals(actualStatus, expectedStatus, "status isn't correct");
 
-        LinkedList<User> usersFromResponse = UnirestObjectsUtil.getUsersFromResponse(jsonNodeHttpResponse);
-
+        logStep("get needed id from test data");
         int neededId = testData.getInt("case_5_id");
-        User actualUser = UnirestObjectsUtil.getUserById(usersFromResponse, neededId);
 
-        JSONObject expectedUserJSON = (JSONObject) testData.getObject("case_5_user");
-        User expectedUser = new User(expectedUserJSON);
+        logStep("get user by id");
+        User actualUser = UnirestObjectsUtil.getUserById(users, neededId);
 
+        logStep("get user object from test data");
+        Object userObject = testData.getObject("case_5_user");
+
+        logStep("get user from user object");
+        User expectedUser = new User(userObject);
+
+        logStep("compare actual and expected user");
         Assert.assertEquals(actualUser, expectedUser, "users aren't equal");
     }
 }

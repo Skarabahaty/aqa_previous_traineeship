@@ -1,34 +1,63 @@
 package models;
 
-import org.json.JSONObject;
-
+import java.util.HashMap;
 import java.util.Objects;
 
 public class Post {
 
-    public Post(JSONObject jsonObject) {
-        this.userID = jsonObject.getInt("userId");
-        this.id = jsonObject.getInt("id");
-        this.title = jsonObject.getString("title");
-        this.body = jsonObject.getString("body");
+    public Post() {
+    }
+
+    private int userId;
+    private int id;
+    private String title;
+    private String body;
+
+
+    public Post(Object object) {
+        HashMap<String, Object> map = (HashMap<String, Object>) object;
+        userId = (int) (long) map.getOrDefault("userId", null);
+        id = (int) (long) map.getOrDefault("id", null);
+        title = (String) map.getOrDefault("title", null);
+        body = (String) map.getOrDefault("body", null);
     }
 
 
-    private final int userID;
-    private final int id;
-    private final String title;
-    private final String body;
+    public int getUserID() {
+        return userId;
+    }
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
     public int getId() {
         return id;
     }
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getBody() {
+        return body;
+    }
+    public void setBody(String body) {
+        this.body = body;
+    }
+
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Post that = (Post) o;
-        return userID == that.userID
+        return userId == that.userId
                 && id == that.id
                 && title.isEmpty() == that.title.isEmpty()
                 && body.isEmpty() == that.body.isEmpty();
@@ -36,13 +65,13 @@ public class Post {
 
     @Override
     public int hashCode() {
-        return Objects.hash(userID, id);
+        return Objects.hash(userId, id);
     }
 
     @Override
     public String toString() {
         return "Post{" +
-                "userID=" + userID +
+                "userID=" + userId +
                 ", id=" + id +
                 ", title='" + title + '\'' +
                 ", body='" + body + '\'' +

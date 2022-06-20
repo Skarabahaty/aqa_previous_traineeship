@@ -2,15 +2,16 @@ package utils;
 
 import models.Post;
 
+import java.util.Arrays;
 import java.util.Comparator;
-import java.util.LinkedList;
 
 public class CollectionsUtils {
 
-    public static boolean isListSortedAscending(LinkedList<Post> list) {
-        return list.stream()
-                .sorted(Comparator.comparingInt(Post::getId))
-                .toList()
-                .equals(list);
+    public static boolean isArraySortedAscending(Post[] list) {
+        return Arrays.equals(
+                Arrays.stream(list)
+                        .sorted(Comparator.comparingInt(Post::getId))
+                        .toArray(),
+                list);
     }
 }

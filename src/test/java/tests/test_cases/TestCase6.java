@@ -1,42 +1,35 @@
 package tests.test_cases;
 
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import models.user.User;
-import org.json.JSONObject;
+import org.apache.http.HttpStatus;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import tests.BaseTest;
-import utils.UnirestObjectsUtil;
-
-import java.util.LinkedList;
 
 public class TestCase6 extends BaseTest {
 
     @Test
-    public void testGetUsers() throws UnirestException {
+    public void testGetUser()  {
+        logStep("set url");
+        String url = setUrl(configData.getString("users"), testData.getString("case_6_needed_id"));
 
-        String testCaseData = testData.getString("case_6");
-        testPageURL.append(testCaseData);
+        logStep("get post");
+        User actualUser = session.getAsObject(url, User.class);
 
-        HttpResponse<JsonNode> jsonNodeHttpResponse =
-                Unirest.get(String.valueOf(testPageURL))
-                        .asJson();
+        logStep("get session status");
+        int actualStatus = session.getStatus();
+        int expectedStatus = HttpStatus.SC_OK;
 
-        int status = jsonNodeHttpResponse.getStatus();
-        int expectedStatus = testData.getInt("correct_get_code");
-        Assert.assertEquals(status, expectedStatus, "status isn't correct");
+        logStep("compare actual and expected session status");
+        Assert.assertEquals(actualStatus, expectedStatus, "status isn't correct");
 
-        LinkedList<User> usersFromResponse = UnirestObjectsUtil.getUsersFromResponse(jsonNodeHttpResponse);
+        logStep("get user object from test data");
+        Object expectedUserObject = testData.getObject("case_5_user");
 
-        int neededId = testData.getInt("case_6_id");
-        User actualUser = UnirestObjectsUtil.getUserById(usersFromResponse, neededId);
+        logStep("compare user from user object");
+        User expectedUser = new User(expectedUserObject);
 
-        JSONObject expectedUserJSON = (JSONObject) testData.getObject("case_5_user");
-        User expectedUser = new User(expectedUserJSON);
-
+        logStep("compare actual and expected user");
         Assert.assertEquals(actualUser, expectedUser, "users aren't equal");
     }
 }
