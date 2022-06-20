@@ -7,7 +7,7 @@ import java.util.LinkedList;
 
 public class CollectionsUtils {
 
-    public static boolean isListSorted(LinkedList<Post> list) {
+    public static boolean isListSortedAscending(LinkedList<Post> list) {
         return list.stream()
                 .sorted(Comparator.comparingInt(Post::getId))
                 .toList()

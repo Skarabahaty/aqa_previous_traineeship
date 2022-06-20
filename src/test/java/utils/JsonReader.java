@@ -6,6 +6,8 @@ import org.json.JSONTokener;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -16,12 +18,15 @@ public class JsonReader {
 
     public static HashMap<String, Object> getDataFromFile(String sourceFileName) {
         HashMap<String, Object> returnHashMap = new HashMap<>();
+
         String userDir = System.getProperty("user.dir");
-        String fileFullPath = String.format("%s\\src\\test\\resources\\%s", userDir, sourceFileName);
+        String resourcesFolder = "src\\test\\resources";
+        Path path = Paths.get(userDir, resourcesFolder, sourceFileName);
+
         JSONObject jsonObject = new JSONObject();
         try (
                 BufferedReader bufferedReader = new BufferedReader(
-                        new FileReader(fileFullPath)
+                        new FileReader(path.toFile())
                 )
         ) {
             JSONTokener jsonTokener = new JSONTokener(bufferedReader);

@@ -2,7 +2,6 @@ package models;
 
 import org.json.JSONObject;
 
-import java.util.HashMap;
 import java.util.Objects;
 
 public class Post {
@@ -20,25 +19,8 @@ public class Post {
     private final String title;
     private final String body;
 
-    public int getUserID() {
-        return userID;
-    }
-
     public int getId() {
         return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getBody() {
-        return body;
-    }
-
-
-    public void put(HashMap<String, Object> map) {
-
     }
 
     @Override

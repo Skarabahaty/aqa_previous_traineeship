@@ -10,6 +10,7 @@
   "case_5": "/users",
   "case_6": "/users/5",
 
+  "case_2_id": 99,
   "case_2_post": {
     "userId": 10,
     "id": 99,

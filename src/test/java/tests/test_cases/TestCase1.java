@@ -18,12 +18,11 @@ public class TestCase1 extends BaseTest {
     @Test
     public void testGetAllPosts() throws UnirestException {
 
-        String mainPage = configData.getString("main_page");
-        String testCase = testData.getString("case_1");
-        String testPage = mainPage.concat(testCase);
+        String testCaseData = testData.getString("case_1");
+        testPageURL.append(testCaseData);
 
         HttpResponse<JsonNode> jsonNodeHttpResponse =
-                Unirest.get(testPage)
+                Unirest.get(String.valueOf(testPageURL))
                         .asJson();
 
         int status = jsonNodeHttpResponse.getStatus();
@@ -32,7 +31,7 @@ public class TestCase1 extends BaseTest {
 
         LinkedList<Post> posts = UnirestObjectsUtil.getPostsFromHTTPResponse(jsonNodeHttpResponse);
 
-        boolean isListSorted = CollectionsUtils.isListSorted(posts);
+        boolean isListSorted = CollectionsUtils.isListSortedAscending(posts);
         Assert.assertTrue(isListSorted, "responses not sorted by id");
     }
 }

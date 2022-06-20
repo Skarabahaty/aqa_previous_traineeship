@@ -17,22 +17,21 @@ public class TestCase2 extends BaseTest {
     @Test
     public void testGetOnePost() throws UnirestException {
 
-        String mainPage = configData.getString("main_page");
-        String testCase = testData.getString("case_2");
-        String testPage = mainPage.concat(testCase);
+        String testCaseData = testData.getString("case_2");
+        testPageURL.append(testCaseData);
 
         HttpResponse<JsonNode> jsonNodeHttpResponse =
-                Unirest.get(testPage)
+                Unirest.get(String.valueOf(testPageURL))
                         .asJson();
 
         int status = jsonNodeHttpResponse.getStatus();
         int expectedStatus = testData.getInt("correct_get_code");
         Assert.assertEquals(status, expectedStatus, "status isn't correct");
 
-        LinkedList<Post> posts =
-                UnirestObjectsUtil.getPostsFromHTTPResponse(jsonNodeHttpResponse);
+        LinkedList<Post> posts = UnirestObjectsUtil.getPostsFromHTTPResponse(jsonNodeHttpResponse);
+        int neededId = testData.getInt("case_2_id");
 
-        Post actualPost = posts.get(0);
+        Post actualPost = UnirestObjectsUtil.getPostById(posts, neededId);
         Post expectedPost =
                 UnirestObjectsUtil.getPostFromTestData(testData, "case_2_post");
         Assert.assertEquals(actualPost, expectedPost, "response objects aren't equal");

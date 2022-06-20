@@ -18,12 +18,11 @@ public class TestCase5 extends BaseTest {
     @Test
     public void testGetUsers() throws UnirestException {
 
-        String mainPage = configData.getString("main_page");
-        String testCase = testData.getString("case_5");
-        String testPage = mainPage.concat(testCase);
+        String testCaseData = testData.getString("case_5");
+        testPageURL.append(testCaseData);
 
         HttpResponse<JsonNode> jsonNodeHttpResponse =
-                Unirest.get(testPage)
+                Unirest.get(String.valueOf(testPageURL))
                         .asJson();
 
         int status = jsonNodeHttpResponse.getStatus();
@@ -33,7 +32,7 @@ public class TestCase5 extends BaseTest {
         LinkedList<User> usersFromResponse = UnirestObjectsUtil.getUsersFromResponse(jsonNodeHttpResponse);
 
         int neededId = testData.getInt("case_5_id");
-        User actualUser = UnirestObjectsUtil.getUserFromListById(usersFromResponse, neededId);
+        User actualUser = UnirestObjectsUtil.getUserById(usersFromResponse, neededId);
 
         JSONObject expectedUserJSON = (JSONObject) testData.getObject("case_5_user");
         User expectedUser = new User(expectedUserJSON);

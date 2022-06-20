@@ -32,9 +32,11 @@ public class UnirestObjectsUtil {
         return new Post(testObject);
     }
 
-    public static boolean isPostEmpty(JsonNode responseBody) {
-        JSONArray array = responseBody.getArray();
-        JSONObject jsonObject = (JSONObject) array.get(0);
+    public static boolean isPostEmpty(HttpResponse<JsonNode> json) {
+        JsonNode body = json.getBody();
+        JSONArray array = body.getArray();
+        int firstIndex = 0;
+        JSONObject jsonObject = (JSONObject) array.get(firstIndex);
         return jsonObject.length() == 0;
     }
 
@@ -81,12 +83,26 @@ public class UnirestObjectsUtil {
         return users;
     }
 
-    public static User getUserFromListById(LinkedList<User> users, int id) {
+    public static User getUserById(LinkedList<User> users, int id) {
+        User result = null;
         for (User user : users) {
             if (user.getId() == id) {
-                return user;
+                result = user;
+                break;
             }
         }
-        return null;
+        return result;
     }
+
+    public static Post getPostById(LinkedList<Post> posts, int id) {
+        Post result = null;
+        for (Post post : posts) {
+            if (post.getId() == id) {
+                result = post;
+                break;
+            }
+        }
+        return result;
+    }
+
 }

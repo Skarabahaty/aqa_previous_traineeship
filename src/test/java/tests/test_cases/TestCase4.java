@@ -18,14 +18,13 @@ public class TestCase4 extends BaseTest {
     @Test
     public void testPost() throws UnirestException {
 
-        String mainPage = configData.getString("main_page");
-        String testCase = testData.getString("case_4");
-        String testPage = mainPage.concat(testCase);
+        String testCaseData = testData.getString("case_4");
+        testPageURL.append(testCaseData);
 
         HashMap<String, Object> objectForPost = UnirestObjectsUtil.getObjectForPost(configData, testData);
 
         HttpResponse<JsonNode> jsonNodeHttpResponse =
-                Unirest.post(testPage)
+                Unirest.post(String.valueOf(testPageURL))
                         .fields(objectForPost)
                         .asJson();
 
