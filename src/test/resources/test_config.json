@@ -1,0 +1,5 @@
+{
+  "main_page": "https://vk.com/",
+  "random_string_length": 10,
+  "picture_storage_folder": "\\src\\test\\resources\\"
+}
