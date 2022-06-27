@@ -17,7 +17,6 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import utils.CollectionsUtils;
 import utils.JsonReader;
-import utils.Session;
 import utils.UnirestObjectsUtil;
 
 public class UnirestTest {
@@ -25,7 +24,6 @@ public class UnirestTest {
     protected TestData testData;
     protected ConfigData configData;
     protected StringBuilder urlBase;
-    protected Session session;
     protected Logger logger;
     protected int counter;
     protected Gson gson;
@@ -38,7 +36,6 @@ public class UnirestTest {
         testData = new TestData(JsonReader.getDataFromFile("test_data.json"));
         configData = new ConfigData(JsonReader.getDataFromFile("config_data.json"));
         urlBase = new StringBuilder(configData.getString("main_page"));
-        session = new Session();
         logger = LoggerFactory.getLogger(this.getClass());
         counter = 0;
         gson = new Gson();
@@ -61,7 +58,7 @@ public class UnirestTest {
         String url = setUrl(configData.getString("posts"));
 
         logStep("get posts");
-        Response response = session.getAsObject(url, Post[].class);
+        Response response = UnirestObjectsUtil.getAsObject(url, Post[].class);
         Post[] posts = (Post[]) response.getBody();
 
         logStep("get session status");
@@ -70,6 +67,11 @@ public class UnirestTest {
 
         logStep("compare actual and expected session status");
         Assert.assertEquals(actualStatus, expectedStatus, "status isn't correct");
+
+        logStep("check if response is json");
+        String actualContentType = response.getContentType();
+        String neededContentType = testData.getString("needed_content_type");
+        Assert.assertTrue(actualContentType.contains(neededContentType));
 
         logStep("check if posts sorted by id");
         boolean isListSorted = CollectionsUtils.isArraySortedAscending(posts);
@@ -83,7 +85,7 @@ public class UnirestTest {
         String url = setUrl(configData.getString("posts"), neededId);
 
         logStep("get post");
-        Response response = session.getAsObject(url, Post.class);
+        Response response = UnirestObjectsUtil.getAsObject(url, Post.class);
         Post actualPost = (Post) response.getBody();
 
         logStep("get session status");
@@ -106,7 +108,7 @@ public class UnirestTest {
                 testData.getString("case_3_needed_id"));
 
         logStep("get post");
-        Response response = session.getAsObject(url, Post.class);
+        Response response = UnirestObjectsUtil.getAsObject(url, Post.class);
         Post post = (Post) response.getBody();
 
         logStep("get session status");
@@ -128,7 +130,7 @@ public class UnirestTest {
         JsonObject objectForPost = UnirestObjectsUtil.getObjectForPost(configData, testData);
 
         logStep("post acquired post");
-        Response response = session.post(url, objectForPost, Post.class);
+        Response response = UnirestObjectsUtil.post(url, objectForPost, Post.class);
         Post actualPost = (Post) response.getBody();
 
         logStep("get session status");
@@ -149,7 +151,7 @@ public class UnirestTest {
         String url = setUrl(configData.getString("users"));
 
         logStep("get users");
-        Response response = session.getAsObject(url, User[].class);
+        Response response = UnirestObjectsUtil.getAsObject(url, User[].class);
         User[] users = (User[]) response.getBody();
 
         logStep("get session status");
@@ -158,6 +160,11 @@ public class UnirestTest {
 
         logStep("compare actual and expected session status");
         Assert.assertEquals(actualStatus, expectedStatus, "status isn't correct");
+
+        logStep("check if response is json");
+        String actualContentType = response.getContentType();
+        String neededContentType = testData.getString("needed_content_type");
+        Assert.assertTrue(actualContentType.contains(neededContentType));
 
         logStep("get needed id from test data");
         int neededId = testData.getInt("case_5_id");
@@ -178,7 +185,7 @@ public class UnirestTest {
         String url = setUrl(configData.getString("users"), testData.getString("case_6_needed_id"));
 
         logStep("get post");
-        Response response = session.getAsObject(url, User.class);
+        Response response = UnirestObjectsUtil.getAsObject(url, User.class);
         User actualUser = (User) response.getBody();
 
         logStep("get session status");

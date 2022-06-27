@@ -4,7 +4,7 @@ import kong.unirest.HttpResponse;
 
 public class Response {
 
-    public static String CONTENT_TYPE = "Content-Type";
+    public static final String CONTENT_TYPE = "Content-Type";
 
     public <T> Response(HttpResponse<T> httpResponse) {
         this.status = httpResponse.getStatus();
