@@ -1,15 +1,13 @@
 package models.user;
 
-import java.util.HashMap;
 import java.util.Objects;
 
 public class Geo {
 
 
-    public Geo(Object geo) {
-        HashMap<String, String> map = (HashMap<String, String>) geo;
-        lng = map.getOrDefault("lng", null);
-        lat = map.getOrDefault("lat", null);
+    public Geo(String lng, String lat) {
+        this.lng = lng;
+        this.lat = lat;
     }
 
     private final String lng;

@@ -1,13 +1,12 @@
 package tests.test_cases;
 
+import com.google.gson.JsonObject;
 import models.Post;
 import org.apache.http.HttpStatus;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import tests.BaseTest;
 import utils.UnirestObjectsUtil;
-
-import java.util.HashMap;
 
 public class TestCase4 extends BaseTest {
 
@@ -18,7 +17,7 @@ public class TestCase4 extends BaseTest {
         String url = setUrl(configData.getString("posts"));
 
         logStep("get object for post from test data");
-        HashMap<String, Object> objectForPost = UnirestObjectsUtil.getObjectForPost(configData, testData);
+        JsonObject objectForPost = UnirestObjectsUtil.getObjectForPost(configData, testData);
 
         logStep("post acquired post");
         Post actualPost = session.post(url, objectForPost, Post.class);
@@ -31,7 +30,7 @@ public class TestCase4 extends BaseTest {
         Assert.assertEquals(actualStatus, expectedStatus, "status isn't correct");
 
         logStep("get post from test data");
-        Post expectedPost = new Post(objectForPost);
+        Post expectedPost = gson.fromJson(objectForPost, Post.class);
 
         logStep("compare actual and expected post");
         Assert.assertEquals(expectedPost, actualPost, "posts aren't equal");

@@ -4,74 +4,37 @@ import java.util.Objects;
 
 public class User  {
 
+    private final String website;
+    private final String phone;
+    private final String name;
+    private final int id;
+    private final String email;
+    private final String username;
+    private final Address address;
+    private final Company company;
 
-    private String website;
-    private String phone;
-    private String name;
-    private int id;
-    private String email;
-    private String username;
-    private Address address;
-    private Company company;
-
-    public User() {
+    public User(String website,
+                String phone,
+                String name,
+                int id,
+                String email,
+                String username,
+                Address address,
+                Company company) {
+        this.website = website;
+        this.phone = phone;
+        this.name = name;
+        this.id = id;
+        this.email = email;
+        this.username = username;
+        this.address = address;
+        this.company = company;
     }
 
     public int getId() {
         return id;
     }
-    public void setId(int id) {
-        this.id = id;
-    }
 
-    public String getWebsite() {
-        return website;
-    }
-    public void setWebsite(String website) {
-        this.website = website;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-    public void setAddress(Object address) {
-        this.address = new Address(address);
-    }
-
-    public Company getCompany() {
-        return company;
-    }
-    public void setCompany(Object company) {
-        this.company = new Company(company);
-    }
 
     @Override
     public boolean equals(Object o) {

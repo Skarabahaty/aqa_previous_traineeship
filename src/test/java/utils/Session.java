@@ -1,11 +1,13 @@
 package utils;
 
+import com.google.gson.JsonObject;
 import exceptions.ResponseException;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import kong.unirest.json.JSONException;
 
-import java.util.Map;
+import java.util.HashMap;
+import java.util.Set;
 
 public class Session {
 
@@ -26,10 +28,16 @@ public class Session {
         }
     }
 
-    public <T, M extends Map<String, Object>> T post(String route, M body, Class<T> clazz) throws ResponseException {
+    public <T, M extends JsonObject> T post(String route, M body, Class<T> clazz) throws ResponseException {
         try {
+            HashMap<String, Object> map = new HashMap<>();
+            Set<String> strings = body.keySet();
+            for (String string : strings) {
+                map.put(string, body.get(string));
+            }
+
             HttpResponse<T> httpResponse = Unirest.post(route)
-                    .fields(body)
+                    .fields(map)
                     .asObject(clazz);
 
             setStatus(httpResponse.getStatus());

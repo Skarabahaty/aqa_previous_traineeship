@@ -1,17 +1,14 @@
 package models.user;
 
-import java.util.HashMap;
 import java.util.Objects;
 
 public class Company {
 
 
-    public Company(Object company) {
-
-        HashMap<String, Object> map = (HashMap<String, Object>) company;
-        bs = (String) map.getOrDefault("bs", null);
-        catchPhrase = (String) map.getOrDefault("catchPhrase", null);
-        name = (String) map.getOrDefault("name", null);
+    public Company(String bs, String catchPhrase, String name) {
+        this.bs = bs;
+        this.catchPhrase = catchPhrase;
+        this.name = name;
     }
 
     private final String bs;

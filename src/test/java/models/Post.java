@@ -1,56 +1,36 @@
 package models;
 
-import java.util.HashMap;
 import java.util.Objects;
 
 public class Post {
 
-    public Post() {
+    public Post(int userId, int id, String title, String body) {
+        this.userId = userId;
+        this.id = id;
+        this.title = title;
+        this.body = body;
     }
 
-    private int userId;
-    private int id;
-    private String title;
-    private String body;
-
-
-    public Post(Object object) {
-        HashMap<String, Object> map = (HashMap<String, Object>) object;
-        userId = (int) (long) map.getOrDefault("userId", null);
-        id = (int) (long) map.getOrDefault("id", null);
-        title = (String) map.getOrDefault("title", null);
-        body = (String) map.getOrDefault("body", null);
-    }
-
+    private final int userId;
+    private final int id;
+    private final String title;
+    private final String body;
 
     public int getUserID() {
         return userId;
-    }
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public int getId() {
         return id;
     }
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;
-    }
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getBody() {
         return body;
     }
-    public void setBody(String body) {
-        this.body = body;
-    }
-
 
     @Override
     public boolean equals(Object o) {

@@ -1,18 +1,19 @@
 package models.user;
 
-import java.util.HashMap;
 import java.util.Objects;
 
 public class Address {
 
-    public Address(Object address) {
-        HashMap<String, Object> address1 = (HashMap<String, Object>) address;
-
-        this.zipcode = (String) address1.getOrDefault("zipcode", null);
-        this.suite = (String) address1.getOrDefault("suite", null);
-        this.city = (String) address1.getOrDefault("city", null);
-        this.street = (String) address1.getOrDefault("street", null);
-        this.geo = new Geo(address1.getOrDefault("geo", null));
+    public Address(String zipcode,
+                   String suite,
+                   String city,
+                   String street,
+                   Geo geo) {
+        this.zipcode = zipcode;
+        this.suite = suite;
+        this.city = city;
+        this.street = street;
+        this.geo = geo;
     }
 
     private final String zipcode;
