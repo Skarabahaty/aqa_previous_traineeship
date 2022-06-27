@@ -2,7 +2,7 @@ package models;
 
 import java.util.Objects;
 
-public class Post {
+public class Post implements Returnable {
 
     public Post(int userId, int id, String title, String body) {
         this.userId = userId;
@@ -31,6 +31,15 @@ public class Post {
     public String getBody() {
         return body;
     }
+
+    public boolean isPostEmpty() {
+        return getId() == 0
+                && getUserID() == 0
+                && getBody() == null
+                && getTitle() == null;
+    }
+
+
 
     @Override
     public boolean equals(Object o) {

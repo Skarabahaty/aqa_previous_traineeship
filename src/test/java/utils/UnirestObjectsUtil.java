@@ -5,24 +5,21 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import data.ConfigData;
 import data.TestData;
-import models.Post;
+import kong.unirest.UnirestException;
 import models.user.User;
 
 import java.util.Arrays;
 
 public class UnirestObjectsUtil {
 
-    public static Post getPostFromTestData(TestData testData, String key) {
-
-        JsonElement object = testData.getJsonObject(key);
-        return new Gson().fromJson(object, Post.class);
-    }
-
-    public static boolean isPostEmpty(Post post) {
-        return post.getId() == 0
-                && post.getUserID() == 0
-                && post.getBody() == null
-                && post.getTitle() == null;
+    public static <T> T getObjectFromTestData(TestData testData, String key, Class<T> clazz) {
+        try {
+            JsonElement object = testData.getJsonObject(key);
+            return new Gson().fromJson(object, clazz);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new UnirestException("Problem with getting object from test data");
+        }
     }
 
     public static JsonObject getObjectForPost(ConfigData configData, TestData testData) {

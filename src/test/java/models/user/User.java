@@ -1,8 +1,10 @@
 package models.user;
 
+import models.Returnable;
+
 import java.util.Objects;
 
-public class User  {
+public class User implements Returnable {
 
     private final String website;
     private final String phone;

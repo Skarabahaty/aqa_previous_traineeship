@@ -1,34 +1,30 @@
 package utils;
 
 import com.google.gson.JsonObject;
-import exceptions.ResponseException;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
+import kong.unirest.UnirestException;
 import kong.unirest.json.JSONException;
+import models.Response;
 
 import java.util.HashMap;
 import java.util.Set;
 
 public class Session {
 
-    private int status;
-
-    public <T> T getAsObject(String route, Class<T> clazz) throws ResponseException {
+    public <T> Response getAsObject(String route, Class<T> clazz) throws UnirestException {
         try {
             HttpResponse<T> httpResponse = Unirest.get(route)
                     .asObject(clazz);
-
-            setStatus(httpResponse.getStatus());
-
-            return httpResponse.getBody();
+            return new Response(httpResponse);
 
         } catch (JSONException e) {
             e.printStackTrace();
-            throw new ResponseException("Problem with response");
+            throw new UnirestException("Problem with response");
         }
     }
 
-    public <T, M extends JsonObject> T post(String route, M body, Class<T> clazz) throws ResponseException {
+    public <T, M extends JsonObject> Response post(String route, M body, Class<T> clazz) throws UnirestException {
         try {
             HashMap<String, Object> map = new HashMap<>();
             Set<String> strings = body.keySet();
@@ -39,21 +35,11 @@ public class Session {
             HttpResponse<T> httpResponse = Unirest.post(route)
                     .fields(map)
                     .asObject(clazz);
+            return new Response(httpResponse);
 
-            setStatus(httpResponse.getStatus());
-
-            return httpResponse.getBody();
         } catch (JSONException e) {
             e.printStackTrace();
-            throw new ResponseException("Problem with response");
+            throw new UnirestException("Problem with response");
         }
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
     }
 }
