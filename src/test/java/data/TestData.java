@@ -1,10 +1,10 @@
 package data;
 
-import java.util.HashMap;
+import com.google.gson.JsonObject;
 
 public class TestData extends AbstractData {
 
-    public TestData(HashMap<String, Object> map) {
+    public TestData(JsonObject map) {
         super(map);
     }
 }

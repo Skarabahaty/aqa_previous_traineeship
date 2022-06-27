@@ -1,25 +1,25 @@
 package data;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.google.gson.JsonObject;
 
 public abstract class AbstractData {
 
-    private final Map<String, Object> data;
+    private final JsonObject data;
 
-    public AbstractData(HashMap<String, Object> map) {
-        this.data = map;
+    public AbstractData(JsonObject json) {
+        this.data = json;
     }
 
     public int getInt(String key) {
-        return (int) (long) data.get(key);
+        return data.get(key).getAsInt();
     }
 
     public String getString(String key) {
-        return (String) data.get(key);
+        return data.get(key).getAsString();
     }
 
-    public Object getObject(String key) {
-        return data.get(key);
+    public JsonObject getJsonObject(String key) {
+        return data.get(key).getAsJsonObject();
     }
+
 }

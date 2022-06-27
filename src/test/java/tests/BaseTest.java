@@ -1,5 +1,6 @@
 package tests;
 
+import com.google.gson.Gson;
 import data.ConfigData;
 import data.TestData;
 import kong.unirest.JsonObjectMapper;
@@ -17,6 +18,7 @@ public abstract class BaseTest {
     protected Session session;
     protected Logger logger;
     protected int counter;
+    protected Gson gson;
 
     static {
         Unirest.config().setObjectMapper(new JsonObjectMapper());
@@ -29,6 +31,7 @@ public abstract class BaseTest {
         session = new Session();
         logger = LoggerFactory.getLogger(this.getClass());
         counter = 0;
+        gson = new Gson();
     }
 
     public String setUrl(String configData, String testData) {

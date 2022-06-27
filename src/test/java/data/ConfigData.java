@@ -1,9 +1,9 @@
 package data;
 
-import java.util.HashMap;
+import com.google.gson.JsonObject;
 
 public class ConfigData extends AbstractData {
-    public ConfigData(HashMap<String, Object> map) {
+    public ConfigData(JsonObject map) {
         super(map);
     }
 }

@@ -30,11 +30,9 @@ public class TestCase5 extends BaseTest {
         logStep("get user by id");
         User actualUser = UnirestObjectsUtil.getUserById(users, neededId);
 
-        logStep("get user object from test data");
-        Object userObject = testData.getObject("case_5_user");
-
         logStep("get user from user object");
-        User expectedUser = new User(userObject);
+        String userString = testData.getJsonObject("case_5_user").toString();
+        User expectedUser = gson.fromJson(userString, User.class);
 
         logStep("compare actual and expected user");
         Assert.assertEquals(actualUser, expectedUser, "users aren't equal");

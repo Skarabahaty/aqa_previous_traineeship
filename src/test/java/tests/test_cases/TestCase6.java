@@ -1,5 +1,6 @@
 package tests.test_cases;
 
+import com.google.gson.JsonElement;
 import models.user.User;
 import org.apache.http.HttpStatus;
 import org.testng.Assert;
@@ -23,11 +24,9 @@ public class TestCase6 extends BaseTest {
         logStep("compare actual and expected session status");
         Assert.assertEquals(actualStatus, expectedStatus, "status isn't correct");
 
-        logStep("get user object from test data");
-        Object expectedUserObject = testData.getObject("case_5_user");
-
-        logStep("compare user from user object");
-        User expectedUser = new User(expectedUserObject);
+        logStep("get user from user object");
+        JsonElement case5User = testData.getJsonObject("case_5_user");
+        User expectedUser = gson.fromJson(case5User, User.class);
 
         logStep("compare actual and expected user");
         Assert.assertEquals(actualUser, expectedUser, "users aren't equal");

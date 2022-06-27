@@ -1,6 +1,5 @@
 package models.user;
 
-import java.util.HashMap;
 import java.util.Objects;
 
 public class User  {
@@ -16,18 +15,6 @@ public class User  {
     private Company company;
 
     public User() {
-    }
-
-    public User(Object userObject) {
-        HashMap<String, Object> map = (HashMap<String, Object>) userObject;
-        website = (String) map.getOrDefault("website", null);
-        phone = (String) map.getOrDefault("phone", null);
-        name = (String) map.getOrDefault("name", null);
-        id = (int) (long) map.getOrDefault("id", null);
-        email = (String) map.getOrDefault("email", null);
-        username = (String) map.getOrDefault("username", null);
-        setAddress(map.getOrDefault("address", null));
-        setCompany(map.getOrDefault("company", null));
     }
 
     public int getId() {
