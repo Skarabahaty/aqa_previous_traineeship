@@ -1,4 +1,5 @@
 {
   "access_token" : "*****",
-  "api_version": "5.131"
+  "api_version": "5.131",
+  "api_query_draft": "\"https://api.vk.com/method/%s\""
 }

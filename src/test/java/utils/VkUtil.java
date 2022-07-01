@@ -9,7 +9,7 @@ import models.Comment;
 import models.Post;
 import models.comments_response.CommentsInitialResponse;
 import models.delete_post.DeletePostInitialResponse;
-import models.forms.UserForm;
+import forms.UserForm;
 import models.likes.LikedUser;
 import models.likes.LikesInitialResponse;
 import models.photo_upload.PhotoUploadServerResponseAfterUpload;
@@ -29,7 +29,7 @@ public class VkUtil {
     }
 
     private static final JsonSettingsFile API_SETTINGS = new JsonSettingsFile("api_settings.json");
-    private static final String API_QUERY_DRAFT = "https://api.vk.com/method/%s";
+    private static final String API_QUERY_DRAFT = (String) API_SETTINGS.getValue("api_query_draft");
     private static final String ACCESS_TOKEN = (String) API_SETTINGS.getValue("/access_token");
     private static final String API_VERSION = (String) API_SETTINGS.getValue("/api_version");
 
@@ -140,19 +140,7 @@ public class VkUtil {
     }
 
     public static Comment findCommentByIdAndReturnIt(int commentId, UserForm userForm) {
-        String commentExpression = String.format("//div[contains(@id, \"%d\") and contains(@id, \"post\")]", commentId);
-        ILabel comment = userForm.returnElementFactory().getLabel(By.xpath(commentExpression), "comment");
-
-        String commentContentExpression = String.format("//div[contains(@id, \"%d\")]//div[@class=\"wall_reply_text\"]", commentId);
-        ILabel commentContent = comment.findChildElement(By.xpath(commentContentExpression), ILabel.class);
-        String commentText = commentContent.getText();
-
-        String commentAuthorExpression = "//a[@class=\"author\"]";
-        ILabel commentAuthor = comment.findChildElement(By.xpath(commentAuthorExpression), ILabel.class);
-        String dataFromId = commentAuthor.getAttribute("data-from-id");
-        int commentAuthorId = Integer.parseInt(dataFromId);
-
-        return new Comment(commentAuthorId, commentText);
+        return userForm.findCommentByIdAndReturnIt(commentId);
     }
 
     public static boolean checkIfLikeFromUser(int actualId, int postId) {

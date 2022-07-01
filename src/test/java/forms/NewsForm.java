@@ -1,4 +1,4 @@
-package models.forms;
+package forms;
 
 import aquality.selenium.forms.Form;
 import org.openqa.selenium.By;

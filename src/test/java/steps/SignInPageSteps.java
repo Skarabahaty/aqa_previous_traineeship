@@ -1,6 +1,6 @@
 package steps;
 
-import models.forms.SignInPage;
+import forms.SignInPage;
 
 public class SignInPageSteps {
 

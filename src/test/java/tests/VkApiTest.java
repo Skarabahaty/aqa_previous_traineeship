@@ -2,7 +2,7 @@ package tests;
 
 import models.Comment;
 import models.Post;
-import models.forms.*;
+import forms.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import steps.SignInPageSteps;
