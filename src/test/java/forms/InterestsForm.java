@@ -41,6 +41,7 @@ public class InterestsForm extends Form {
     }
 
     public void clickNextButton() {
-        nextButton.getJsActions().click();
+        nextButton.getJsActions().scrollBy(0, 100);
+        nextButton.click();
     }
 }
