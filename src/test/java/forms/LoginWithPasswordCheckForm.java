@@ -55,7 +55,7 @@ public class LoginWithPasswordCheckForm extends Form {
 
     public void setDotSomething(int index) {
         List<ILabel> comboBoxElements = getElementFactory().findElements(comboBoxElementLocator, ILabel.class);
-        comboBoxElements.get(index - 1).click();
+        comboBoxElements.get(index).click();
     }
 
     public void setPassword(String password) {

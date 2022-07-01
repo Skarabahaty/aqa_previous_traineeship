@@ -53,7 +53,7 @@ public class TestCase1 extends BaseTest {
 
         logStep("generate dot.smth");
         int optionsAmount = loginWithPasswordCheckForm.getComboBoxOptionsAmount();
-        int optionIndex = Randomizer.getRandomIntInRange(optionsAmount);
+        int optionIndex = Randomizer.getRandomIntInRange(optionsAmount - 1);
 
         logStep("set dot.smth");
         loginWithPasswordCheckForm.setDotSomething(optionIndex);
