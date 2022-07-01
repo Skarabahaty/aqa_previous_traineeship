@@ -1,6 +1,5 @@
 package tests.test_suit;
 
-import aquality.selenium.browser.AqualityServices;
 import aquality.selenium.elements.interfaces.ICheckBox;
 import aquality.selenium.elements.interfaces.ILabel;
 import forms.InterestsForm;
@@ -130,8 +129,6 @@ public class TestCase1 extends BaseTest {
 
         logStep("click next button");
         interestsForm.clickNextButton();
-
-        logStep(AqualityServices.getConfiguration().getBrowserProfile().getDriverSettings().getCapabilities().toString());
 
         PersonalDetailsForm personalDetailsForm = new PersonalDetailsForm();
         Assert.assertTrue(personalDetailsForm.state().waitForDisplayed(), "personal details page isn't opened");
