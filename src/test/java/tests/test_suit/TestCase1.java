@@ -124,8 +124,10 @@ public class TestCase1 extends BaseTest {
         logStep("set value to clipboard");
         ClipboardUtil.setValueToClipBoard(avatarPath);
 
-        logStep("send image");
-        RobotUtil.sendImageUsingRobot(robotDelay);
+        logStep("send image using costyl");
+        interestsForm.sendImageCostyl(avatarPath);
+
+//        RobotUtil.sendImageUsingRobot(robotDelay);
 
         logStep("click next button");
         interestsForm.clickNextButton();
