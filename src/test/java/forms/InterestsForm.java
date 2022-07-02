@@ -1,6 +1,5 @@
 package forms;
 
-import aquality.selenium.browser.AqualityServices;
 import aquality.selenium.elements.interfaces.IButton;
 import aquality.selenium.elements.interfaces.ICheckBox;
 import aquality.selenium.elements.interfaces.ILabel;
@@ -42,13 +41,6 @@ public class InterestsForm extends Form {
     }
 
     public void clickNextButton() {
-        boolean clickable = nextButton.state().isClickable();
-        if (clickable) {
-            nextButton.click();
-        } else {
-            AqualityServices.getLogger().info("non clickable");
-            nextButton.getJsActions().scrollBy(0, 1000);
-            nextButton.click();
-        }
+        nextButton.clickAndWait();
     }
 }
