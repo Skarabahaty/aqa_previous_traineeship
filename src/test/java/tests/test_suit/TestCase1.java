@@ -131,11 +131,11 @@ public class TestCase1 extends BaseTest {
         interestsForm.clickNextButton();
 
         PersonalDetailsForm personalDetailsForm = new PersonalDetailsForm();
-        boolean displayed = personalDetailsForm.state().waitForDisplayed();
+        boolean displayed = personalDetailsForm.state().waitForExist();
         if (displayed) {
-            logStep("displayed");
+            logStep("exists");
         } else {
-            logStep("not displayed");
+            logStep("not exists");
         }
 
         Assert.assertTrue(displayed, "personal details page isn't opened");

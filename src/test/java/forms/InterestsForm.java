@@ -41,6 +41,6 @@ public class InterestsForm extends Form {
     }
 
     public void clickNextButton() {
-        nextButton.clickAndWait();
+        nextButton.click();
     }
 }

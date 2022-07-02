@@ -25,7 +25,6 @@ public abstract class BaseTest {
     @BeforeMethod
     protected void beforeMethod() {
         browser = AqualityServices.getBrowser();
-        browser.maximize();
     }
 
     @AfterMethod
