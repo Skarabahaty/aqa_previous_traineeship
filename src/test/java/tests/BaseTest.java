@@ -25,6 +25,7 @@ public abstract class BaseTest {
     @BeforeMethod
     protected void beforeMethod() {
         browser = AqualityServices.getBrowser();
+        browser.setWindowSize(1920, 1080 );
     }
 
     @AfterMethod
