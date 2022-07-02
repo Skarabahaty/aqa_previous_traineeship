@@ -130,6 +130,13 @@ public class TestCase1 extends BaseTest {
         logStep("click next button");
         interestsForm.clickNextButton();
 
+        boolean errorPresent = interestsForm.isErrorPresent();
+        if (errorPresent) {
+            logStep("error present");
+        } else {
+            logStep("no error");
+        }
+
         PersonalDetailsForm personalDetailsForm = new PersonalDetailsForm();
         boolean displayed = personalDetailsForm.state().waitForExist();
         if (displayed) {

@@ -44,4 +44,9 @@ public class InterestsForm extends Form {
         nextButton.getJsActions().scrollBy(0, 500);
         nextButton.click();
     }
+
+    public boolean isErrorPresent() {
+        ILabel error = getElementFactory().getLabel(By.xpath("//li[contains(text(), \"upload\")]"), "error");
+        return error.state().isDisplayed();
+    }
 }
