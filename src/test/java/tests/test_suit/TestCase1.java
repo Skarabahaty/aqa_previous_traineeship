@@ -13,15 +13,13 @@ import utils.*;
 
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class TestCase1 extends BaseTest {
 
     @Test
     public void test() {
-        Map<String, String> getenv = System.getenv();
-        String s = getenv.toString();
+        String s = System.getenv("browser");
         logStep(s);
         String mainPageUrl = configData.getValue("/main_page").toString();
 
@@ -127,7 +125,6 @@ public class TestCase1 extends BaseTest {
 
         logStep("set value to clipboard");
         ClipboardUtil.setValueToClipBoard(avatarPath);
-
 
         RobotUtil.sendImageUsingRobot(robotDelay);
 
