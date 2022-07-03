@@ -1,10 +1,12 @@
 package forms;
 
-import aquality.selenium.elements.interfaces.*;
+import aquality.selenium.elements.interfaces.IButton;
+import aquality.selenium.elements.interfaces.ICheckBox;
+import aquality.selenium.elements.interfaces.ILabel;
+import aquality.selenium.elements.interfaces.ILink;
 import aquality.selenium.forms.Form;
 import org.openqa.selenium.By;
 
-import java.nio.file.Path;
 import java.util.List;
 
 public class InterestsForm extends Form {
@@ -20,7 +22,6 @@ public class InterestsForm extends Form {
     private final By downloadAvatarLinkLocator = By.linkText("upload");
     private final By nextButtonLocator = By.xpath("//button[contains(text(), 'Next')]");
     private final ILink downloadAvatarLink = getElementFactory().getLink(downloadAvatarLinkLocator, "download avatar link");
-    private final ITextBox downloadAvatarLinkTextBox = getElementFactory().getTextBox(downloadAvatarLinkLocator, "download avatar link");
     private final IButton nextButton = getElementFactory().getButton(nextButtonLocator, "next button");
 
     public void clickCheckBoxByIndex(int index) {
@@ -47,9 +48,5 @@ public class InterestsForm extends Form {
     public boolean isErrorPresent() {
         ILabel error = getElementFactory().getLabel(By.xpath("//li[contains(text(), \"upload\")]"), "error");
         return error.state().isDisplayed();
-    }
-
-    public void sendImageCostyl(Path avatarPath) {
-        downloadAvatarLinkTextBox.type(String.valueOf(avatarPath));
     }
 }
