@@ -19,13 +19,14 @@ public abstract class BaseTest {
         testData = new JsonSettingsFile("test_data.json");
         configData = new JsonSettingsFile("test_config.json");
         logger = LoggerFactory.getLogger(BaseTest.class);
-        stepCounter = 1;
+        stepCounter = 0;
     }
 
     @BeforeMethod
     protected void beforeMethod() {
         browser = AqualityServices.getBrowser();
         browser.maximize();
+        logStep(AqualityServices.getBrowser().getBrowserName().toString());
     }
 
     @AfterMethod
@@ -34,7 +35,7 @@ public abstract class BaseTest {
     }
 
     protected void logStep(String description) {
-        String message = String.format("Step %d: %s", stepCounter++, description);
+        String message = String.format("Step %d: %s", ++stepCounter, description);
         logger.info(message);
     }
 }
