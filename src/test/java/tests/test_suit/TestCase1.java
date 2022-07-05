@@ -19,9 +19,6 @@ public class TestCase1 extends BaseTest {
 
     @Test
     public void test() {
-        logStep("hello");
-        String s = System.getenv("browser");
-        logStep(s);
         String mainPageUrl = configData.getValue("/main_page").toString();
 
         logStep("go to main page");

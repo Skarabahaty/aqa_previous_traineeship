@@ -26,7 +26,6 @@ public abstract class BaseTest {
     protected void beforeMethod() {
         browser = AqualityServices.getBrowser();
         browser.maximize();
-        logStep(AqualityServices.getBrowser().getBrowserName().toString());
     }
 
     @AfterMethod
