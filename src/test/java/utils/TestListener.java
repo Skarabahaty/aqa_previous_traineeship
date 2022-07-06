@@ -12,13 +12,11 @@ public class TestListener implements ITestListener {
 
     @Override
     public void onTestStart(ITestResult result) {
-        String name = result.getName();
         String method = result.getMethod().getMethodName();
         long startMillis = result.getStartMillis();
 
-        test.setName(name);
         test.setMethod_name(method);
-        test.setStart_time(startMillis);
+//        test.setStart_time(startMillis);
     }
 
     @Override
@@ -26,7 +24,7 @@ public class TestListener implements ITestListener {
         long endMillis = result.getEndMillis();
         int status = result.getStatus();
 
-        test.setEnd_time(endMillis);
+//        test.setEnd_time(endMillis);
         test.setStatus_id(status);
     }
 
@@ -35,7 +33,7 @@ public class TestListener implements ITestListener {
         long endMillis = result.getEndMillis();
         int status = result.getStatus();
 
-        test.setEnd_time(endMillis);
+//        test.setEnd_time(endMillis);
         test.setStatus_id(status);
     }
 
@@ -44,12 +42,12 @@ public class TestListener implements ITestListener {
         long endMillis = result.getEndMillis();
         int status = result.getStatus();
 
-        test.setEnd_time(endMillis);
+//        test.setEnd_time(endMillis);
         test.setStatus_id(status);
     }
 
     @Override
     public void onFinish(ITestContext context) {
-        System.out.println(test.toString());
+        JDBConnector.addEntity(test);
     }
 }

@@ -1,17 +1,21 @@
 package models;
 
+import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
+
 public class Test {
 
-    private String name;
+    private String name = "Dummy test";
     private int status_id;
     private String method_name;
-    private int project_id;
-    private int session_id;
+    private int project_id = 0;
+    private int session_id = 0;
     private long start_time;
     private long end_time;
-    private String env;
-    private String browser;
-    private int author_id;
+    private String env = "Dummy env";
+    private String browser = "Dummy browser";
+    private int author_id = 0;
 
     public String getName() {
         return name;
@@ -91,6 +95,13 @@ public class Test {
 
     public void setAuthor_id(int author_id) {
         this.author_id = author_id;
+    }
+
+    public List<Serializable> getFields() {
+        return new LinkedList<>(
+                List.of(name, status_id, method_name,
+                        project_id, session_id, start_time,
+                        end_time, env, browser, author_id));
     }
 
     @Override
