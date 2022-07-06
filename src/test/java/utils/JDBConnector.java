@@ -5,9 +5,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class JDBCConnector {
+public class JDBConnector {
 
     private Connection connection = null;
+    private final String CONNECTION_PARAMS_DRAFT = "jdbc:mysql://localhost:%d/%s";
 
     private Connection establishDataBaseConnection() {
         if (connection == null) {
