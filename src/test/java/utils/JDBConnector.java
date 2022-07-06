@@ -1,7 +1,7 @@
 package utils;
 
 import com.google.gson.JsonObject;
-import models.Test;
+import models.TestEntry;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
@@ -18,16 +18,32 @@ public class JDBConnector {
     private static Connection connection = establishDataBaseConnection();
     private static Statement statement = createStatement(connection);
 
-    public static void addEntity(Test test) {
-        List<Serializable> fields = test.getFields();
+    public static void addEntity(TestEntry testEntry) {
+        List<Serializable> fields = testEntry.getFields();
         StringBuilder insertQueryDraft = new StringBuilder(QUERIES.get("insert").getAsString());
 
+        constructInsertQueryDraft(fields, insertQueryDraft);
+
+        String insertQuery = String.format(insertQueryDraft.toString(),
+                CONFIG.get("table").getAsString());
+
+        try {
+            int executeUpdate = statement.executeUpdate(insertQuery);
+            System.out.println("Addition successful, number of added entries: " + executeUpdate);
+        } catch (SQLException e) {
+            System.err.println("Problem with query");
+            e.printStackTrace();
+        }
+    }
+
+    private static void constructInsertQueryDraft(List<Serializable> fields, StringBuilder insertQueryDraft) {
         insertQueryDraft.append("(");
         int size = fields.size();
         for (int i = 0; i < size; i++) {
             Serializable serializable = fields.get(i);
             switch (serializable.getClass().getSimpleName()) {
                 case "String":
+                case "Timestamp":
                     insertQueryDraft.append("'").append(serializable).append("'");
                     break;
                 case "Integer":
@@ -41,16 +57,6 @@ public class JDBConnector {
             }
         }
         insertQueryDraft.append(");");
-
-        String insertQuery = String.format(insertQueryDraft.toString(),
-                CONFIG.get("table").getAsString());
-
-        try {
-            statement.executeUpdate(insertQuery);
-        } catch (SQLException e) {
-            System.err.println("Problem with query");
-            System.err.println(e);
-        }
     }
 
     private static Connection establishDataBaseConnection() {
@@ -69,12 +75,12 @@ public class JDBConnector {
 
         } catch (SQLException e) {
             System.err.println("Query problem");
-            System.err.println(e);
+            e.printStackTrace();
 
         } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException |
                  IllegalAccessException | InvocationTargetException e) {
             System.err.println("Connection failed");
-            System.err.println(e);
+            e.printStackTrace();
 
         }
         return connection;
@@ -85,7 +91,7 @@ public class JDBConnector {
             return connection.createStatement();
         } catch (SQLException e) {
             System.err.println("Statement creation problem");
-            System.err.println(e);
+            e.printStackTrace();
         }
         return null;
     }
