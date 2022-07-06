@@ -11,14 +11,14 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class UsualTest {
 
-    @Test()
-    public void testName() {
+    @Test
+    public void testCanFailWith50PercentProbability() {
         boolean bool = ThreadLocalRandom.current().nextBoolean();
         Assert.assertTrue(bool);
     }
 
-    @AfterMethod
-    public void tearDown() {
+    @AfterMethod()
+    public void checkForAddingEntry() {
 
     }
 }

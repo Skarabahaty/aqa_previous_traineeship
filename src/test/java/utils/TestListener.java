@@ -9,7 +9,6 @@ public class TestListener implements ITestListener {
 
     private final TestEntry testEntry = new TestEntry();
 
-
     @Override
     public void onTestStart(ITestResult result) {
         String method = result.getMethod().getMethodName();
