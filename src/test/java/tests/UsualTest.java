@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @Listeners(utils.TestListener.class)
 
-public class UsualTestEntry {
+public class UsualTest {
 
     @Test()
     public void testName() {
