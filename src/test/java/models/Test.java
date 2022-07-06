@@ -6,11 +6,12 @@ import java.util.List;
 
 public class Test {
 
+    private int id = 346;
     private String name = "Dummy test";
     private int status_id;
     private String method_name;
-    private int project_id = 0;
-    private int session_id = 0;
+    private int project_id = 4;
+    private int session_id = 4;
     private long start_time;
     private long end_time;
     private String env = "Dummy env";
@@ -99,9 +100,9 @@ public class Test {
 
     public List<Serializable> getFields() {
         return new LinkedList<>(
-                List.of(name, status_id, method_name,
+                List.of(id, name, status_id, method_name,
                         project_id, session_id, start_time,
-                        end_time, env, browser, author_id));
+                        end_time, env, browser));
     }
 
     @Override
