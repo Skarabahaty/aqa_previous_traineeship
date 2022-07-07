@@ -4,11 +4,11 @@ import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import utils.TestListenerForTEstResultsInsertion;
+import listeners.TestListenerForTestResultsInsertion;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-@Listeners(TestListenerForTEstResultsInsertion.class)
+@Listeners(TestListenerForTestResultsInsertion.class)
 
 public class TestCase1GetTestResultAndInsertItIntoDatabase {
 

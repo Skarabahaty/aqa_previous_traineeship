@@ -13,51 +13,10 @@ public class JDBConnector {
     private static final JsonObject CONFIG = JsonReader.getDataFromFile("configs.json");
     private static final JsonObject QUERIES = JsonReader.getDataFromFile("queries.json");
     private static final String CONNECTION_PARAMS_DRAFT = "jdbc:mysql://localhost:%d/%s";
-    private static Connection connection = establishDataBaseConnection();
+    private static Connection connection = connectDatabase();
     private static final Statement statement = createStatement(connection);
 
-    public static void addEntity(TestEntry testEntry) {
-        List<Serializable> fields = testEntry.getFields();
-        StringBuilder insertQueryDraft = new StringBuilder(QUERIES.get("insert").getAsString());
-
-        constructInsertQueryDraft(fields, insertQueryDraft);
-
-        String insertQuery = String.format(insertQueryDraft.toString(),
-                CONFIG.get("table").getAsString());
-
-        try {
-            int executeUpdate = Objects.requireNonNull(statement).executeUpdate(insertQuery);
-            System.out.println("Addition successful, number of added entries: " + executeUpdate);
-        } catch (SQLException e) {
-            System.err.println("Problem with query");
-            e.printStackTrace();
-        }
-    }
-
-    private static void constructInsertQueryDraft(List<Serializable> fields, StringBuilder insertQueryDraft) {
-        insertQueryDraft.append("(");
-        int size = fields.size();
-        for (int i = 0; i < size; i++) {
-            Serializable serializable = fields.get(i);
-            switch (serializable.getClass().getSimpleName()) {
-                case "String":
-                case "Timestamp":
-                    insertQueryDraft.append("'").append(serializable).append("'");
-                    break;
-                case "Integer":
-                case "Long":
-                    insertQueryDraft.append(serializable);
-                    break;
-            }
-
-            if (size - i > 1) {
-                insertQueryDraft.append(", ");
-            }
-        }
-        insertQueryDraft.append(");");
-    }
-
-    private static Connection establishDataBaseConnection() {
+    private static Connection connectDatabase() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
             System.out.println("Connection successful!");
@@ -93,6 +52,46 @@ public class JDBConnector {
         return null;
     }
 
+    private static void constructInsertQueryDraft(List<Serializable> fields, StringBuilder insertQueryDraft) {
+        insertQueryDraft.append("(");
+        int size = fields.size();
+        for (int i = 0; i < size; i++) {
+            Serializable serializable = fields.get(i);
+            switch (serializable.getClass().getSimpleName()) {
+                case "String":
+                case "Timestamp":
+                    insertQueryDraft.append("'").append(serializable).append("'");
+                    break;
+                case "Integer":
+                case "Long":
+                    insertQueryDraft.append(serializable);
+                    break;
+            }
+
+            if (size - i > 1) {
+                insertQueryDraft.append(", ");
+            }
+        }
+        insertQueryDraft.append(");");
+    }
+
+    public static void addEntity(TestEntry testEntry) {
+        List<Serializable> fields = testEntry.getFields();
+        StringBuilder insertQueryDraft = new StringBuilder(QUERIES.get("insert").getAsString());
+
+        constructInsertQueryDraft(fields, insertQueryDraft);
+
+        String insertQuery = String.format(insertQueryDraft.toString(),
+                CONFIG.get("table").getAsString());
+
+        try {
+            int executeUpdate = Objects.requireNonNull(statement).executeUpdate(insertQuery);
+            System.out.println("Addition successful, number of added entries: " + executeUpdate);
+        } catch (SQLException e) {
+            System.err.println("Problem with query");
+            e.printStackTrace();
+        }
+    }
 
     public static TestEntry checkForPresenceAndReturnEntry(TestEntry testEntry) {
         String checkForPresenceQuery = String.format(
@@ -128,4 +127,6 @@ public class JDBConnector {
         }
         return null;
     }
+
+
 }

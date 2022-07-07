@@ -1,12 +1,13 @@
-package utils;
+package listeners;
 
 import models.TestEntry;
 import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
+import utils.JDBConnector;
 
-public class TestListenerForTEstResultsInsertion implements ITestListener {
+public class TestListenerForTestResultsInsertion implements ITestListener {
 
     private final TestEntry testEntry = new TestEntry();
 
