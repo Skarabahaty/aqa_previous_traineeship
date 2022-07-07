@@ -5,18 +5,16 @@ import models.TestEntry;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.List;
+import java.util.Objects;
 
 public class JDBConnector {
     private static final JsonObject CONFIG = JsonReader.getDataFromFile("configs.json");
     private static final JsonObject QUERIES = JsonReader.getDataFromFile("queries.json");
     private static final String CONNECTION_PARAMS_DRAFT = "jdbc:mysql://localhost:%d/%s";
     private static Connection connection = establishDataBaseConnection();
-    private static Statement statement = createStatement(connection);
+    private static final Statement statement = createStatement(connection);
 
     public static void addEntity(TestEntry testEntry) {
         List<Serializable> fields = testEntry.getFields();
@@ -28,7 +26,7 @@ public class JDBConnector {
                 CONFIG.get("table").getAsString());
 
         try {
-            int executeUpdate = statement.executeUpdate(insertQuery);
+            int executeUpdate = Objects.requireNonNull(statement).executeUpdate(insertQuery);
             System.out.println("Addition successful, number of added entries: " + executeUpdate);
         } catch (SQLException e) {
             System.err.println("Problem with query");
@@ -60,7 +58,6 @@ public class JDBConnector {
     }
 
     private static Connection establishDataBaseConnection() {
-
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
             System.out.println("Connection successful!");
@@ -91,6 +88,41 @@ public class JDBConnector {
             return connection.createStatement();
         } catch (SQLException e) {
             System.err.println("Statement creation problem");
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    public static TestEntry checkForPresenceAndReturnEntry(TestEntry testEntry) {
+        String checkForPresenceQuery = String.format(
+                QUERIES.get("check_for_presence").getAsString(),
+                CONFIG.get("table").getAsString(),
+                testEntry.getName(),
+                testEntry.getStatusId(),
+                testEntry.getMethodName(),
+                testEntry.getProjectId(),
+                testEntry.getSessionId(),
+                testEntry.getStartTime(),
+                testEntry.getEndTime(),
+                testEntry.getEnv(),
+                testEntry.getBrowser());
+
+        try {
+            ResultSet resultSet = Objects.requireNonNull(statement).executeQuery(checkForPresenceQuery);
+            resultSet.next();
+            return new TestEntry(
+                    resultSet.getString("name"),
+                    resultSet.getInt("status_id"),
+                    resultSet.getString("method_name"),
+                    resultSet.getInt("project_id"),
+                    resultSet.getInt("session_id"),
+                    resultSet.getString("start_time").replaceAll("\\.[0-9]+", ""),
+                    resultSet.getString("end_time").replaceAll("\\.[0-9]+", ""),
+                    resultSet.getString("env"),
+                    resultSet.getString("browser"));
+        } catch (SQLException e) {
+            System.err.println("Problem with query");
             e.printStackTrace();
         }
         return null;

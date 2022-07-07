@@ -1,6 +1,7 @@
 package utils;
 
 import models.TestEntry;
+import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
@@ -48,5 +49,9 @@ public class TestListener implements ITestListener {
     @Override
     public void onFinish(ITestContext context) {
         JDBConnector.addEntity(testEntry);
+
+        TestEntry entryFromDatabase = JDBConnector.checkForPresenceAndReturnEntry(testEntry);
+        Assert.assertEquals(entryFromDatabase, testEntry, "test entry isn't present in table");
+        System.out.println("Test entry is present in table! Hooray!");
     }
 }
