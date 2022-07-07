@@ -11,8 +11,9 @@ public class TestEntry {
     public TestEntry() {
     }
 
-    public TestEntry(String name, int statusId, String methodName, int projectId, int sessionId,
+    public TestEntry(int id, String name, int statusId, String methodName, int projectId, int sessionId,
                      String startTime, String endTime, String env, String browser) {
+        this.id = id;
         this.name = name;
         this.statusId = statusId;
         this.methodName = methodName;
@@ -34,6 +35,14 @@ public class TestEntry {
     private String endTime;
     private String env = "env";
     private String browser = "browser";
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -116,8 +125,8 @@ public class TestEntry {
 
     @Override
     public String toString() {
-        return String.format("TestEntry{name='%s' , status_id=%d , method_name='%s' , project_id=%d , session_id=%d , start_time=%s , end_time=%s , env='%s' , browser='%s'} ",
-                name, statusId, methodName, projectId, sessionId, startTime, endTime, env, browser);
+        return String.format("TestEntry{id=%d, name='%s' , status_id=%d , method_name='%s' , project_id=%d , session_id=%d , start_time=%s , end_time=%s , env='%s' , browser='%s'} ",
+                id, name, statusId, methodName, projectId, sessionId, startTime, endTime, env, browser);
     }
 
     @Override
@@ -125,8 +134,7 @@ public class TestEntry {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TestEntry testEntry = (TestEntry) o;
-        return id == testEntry.id &&
-                statusId == testEntry.statusId &&
+        return statusId == testEntry.statusId &&
                 projectId == testEntry.projectId &&
                 sessionId == testEntry.sessionId &&
                 name.equals(testEntry.name) &&
@@ -139,6 +147,6 @@ public class TestEntry {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, statusId, methodName, projectId, sessionId, startTime, endTime, env, browser);
+        return Objects.hash(name, statusId, methodName, projectId, sessionId, startTime, endTime, env, browser);
     }
 }

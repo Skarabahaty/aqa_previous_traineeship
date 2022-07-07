@@ -6,7 +6,7 @@ import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
-public class TestListener implements ITestListener {
+public class TestListenerForTEstResultsInsertion implements ITestListener {
 
     private final TestEntry testEntry = new TestEntry();
 

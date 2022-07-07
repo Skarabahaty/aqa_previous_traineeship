@@ -112,6 +112,7 @@ public class JDBConnector {
             ResultSet resultSet = Objects.requireNonNull(statement).executeQuery(checkForPresenceQuery);
             resultSet.next();
             return new TestEntry(
+                    resultSet.getInt("id"),
                     resultSet.getString("name"),
                     resultSet.getInt("status_id"),
                     resultSet.getString("method_name"),

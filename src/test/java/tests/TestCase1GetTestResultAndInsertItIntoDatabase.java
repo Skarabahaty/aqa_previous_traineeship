@@ -4,12 +4,13 @@ import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
+import utils.TestListenerForTEstResultsInsertion;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-@Listeners(utils.TestListener.class)
+@Listeners(TestListenerForTEstResultsInsertion.class)
 
-public class UsualTest {
+public class TestCase1GetTestResultAndInsertItIntoDatabase {
 
     @Test
     public void testCanFailWith50PercentProbability() {
