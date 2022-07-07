@@ -29,12 +29,13 @@ public class TestEntry {
     private String name = "test";
     private int statusId;
     private String methodName;
-    private int projectId = 4;
-    private int sessionId = 4;
+    private int projectId = 7;
+    private int sessionId = 21;
     private String startTime;
     private String endTime;
     private String env = "env";
     private String browser = "browser";
+    private int authorId = 1;
 
     public int getId() {
         return id;
@@ -114,6 +115,14 @@ public class TestEntry {
 
     public void setBrowser(String browser) {
         this.browser = browser;
+    }
+
+    public int getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(int authorId) {
+        this.authorId = authorId;
     }
 
     public List<Serializable> getFields() {

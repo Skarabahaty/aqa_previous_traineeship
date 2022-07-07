@@ -6,6 +6,7 @@ import models.TestEntry;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -13,7 +14,7 @@ public class JDBConnector {
     private static final JsonObject CONFIG = JsonReader.getDataFromFile("configs.json");
     private static final JsonObject QUERIES = JsonReader.getDataFromFile("queries.json");
     private static final String CONNECTION_PARAMS_DRAFT = "jdbc:mysql://localhost:%d/%s";
-    private static Connection connection = connectDatabase();
+    private static final Connection connection = connectDatabase();
     private static final Statement statement = createStatement(connection);
 
     private static Connection connectDatabase() {
@@ -25,7 +26,7 @@ public class JDBConnector {
                     CONFIG.get("port").getAsInt(),
                     CONFIG.get("schema").getAsString());
 
-            connection = DriverManager.getConnection(connectionParams,
+            return DriverManager.getConnection(connectionParams,
                     CONFIG.get("user").getAsString(),
                     CONFIG.get("password").getAsString());
 
@@ -110,17 +111,7 @@ public class JDBConnector {
         try {
             ResultSet resultSet = Objects.requireNonNull(statement).executeQuery(checkForPresenceQuery);
             resultSet.next();
-            return new TestEntry(
-                    resultSet.getInt("id"),
-                    resultSet.getString("name"),
-                    resultSet.getInt("status_id"),
-                    resultSet.getString("method_name"),
-                    resultSet.getInt("project_id"),
-                    resultSet.getInt("session_id"),
-                    resultSet.getString("start_time").replaceAll("\\.[0-9]+", ""),
-                    resultSet.getString("end_time").replaceAll("\\.[0-9]+", ""),
-                    resultSet.getString("env"),
-                    resultSet.getString("browser"));
+            return getTestEntry(resultSet);
         } catch (SQLException e) {
             System.err.println("Problem with query");
             e.printStackTrace();
@@ -128,5 +119,91 @@ public class JDBConnector {
         return null;
     }
 
+    private static TestEntry getTestEntry(ResultSet resultSet) throws SQLException {
+        return new TestEntry(
+                resultSet.getInt("id"),
+                resultSet.getString("name"),
+                resultSet.getInt("status_id"),
+                resultSet.getString("method_name"),
+                resultSet.getInt("project_id"),
+                resultSet.getInt("session_id"),
+                resultSet.getString("start_time").replaceAll("\\.[0-9]+", ""),
+                resultSet.getString("end_time").replaceAll("\\.[0-9]+", ""),
+                resultSet.getString("env"),
+                resultSet.getString("browser"));
+    }
 
+
+    public static List<TestEntry> getTestEntriesBasedOnID(int randomIntFromZeroToNine) {
+        List<TestEntry> returnList = new ArrayList<>();
+
+        String selectCondition = String.format(
+                QUERIES.get("select_condition").getAsString(),
+                CONFIG.get("table").getAsString(),
+                randomIntFromZeroToNine,
+                randomIntFromZeroToNine);
+
+        try {
+            ResultSet resultSet = Objects.requireNonNull(statement).executeQuery(selectCondition);
+            while(resultSet.next()) {
+                returnList.add(
+                        getTestEntry(resultSet)
+                );
+            }
+            return returnList;
+        } catch (SQLException e) {
+            System.err.println("Problem with query");
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static boolean isAdditionNeeded() {
+        String selectProjectCheck = QUERIES.get("select_project_check").getAsString();
+        String selectAuthorCheck = QUERIES.get("select_author_check").getAsString();
+        String selectSessionCheck = QUERIES.get("select_session_check").getAsString();
+        try {
+            ResultSet projectResultSet = Objects.requireNonNull(statement).executeQuery(selectProjectCheck);
+            boolean projectHasEntries = projectResultSet.next();
+            projectResultSet.close();
+
+            ResultSet authorResultSet = Objects.requireNonNull(statement).executeQuery(selectAuthorCheck);
+            boolean authorHasEntries = authorResultSet.next();
+            authorResultSet.close();
+
+            ResultSet sessionResultSet = Objects.requireNonNull(statement).executeQuery(selectSessionCheck);
+            boolean sessionHasEntries = sessionResultSet.next();
+            sessionResultSet.close();
+
+            if (projectHasEntries && authorHasEntries && sessionHasEntries) {
+                return false;
+            } else {
+                System.out.println("Performing pre-condition addition");
+                return true;
+            }
+        } catch (SQLException e) {
+            System.err.println("Problem with query in pre-condition");
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static void insertNeededFieldsInTable() {
+        if (isAdditionNeeded()) {
+            String insertProjectId = QUERIES.get("insert_project_id").getAsString();
+            String insertAuthorId = QUERIES.get("insert_author_id").getAsString();
+            String insertSessionId = QUERIES.get("insert_session_id").getAsString();
+            try {
+                Objects.requireNonNull(statement).executeUpdate(insertProjectId);
+                Objects.requireNonNull(statement).executeUpdate(insertAuthorId);
+                Objects.requireNonNull(statement).executeUpdate(insertSessionId);
+                System.out.println("Pre-condition addition successful");
+            } catch (SQLException e) {
+                System.err.println("Problem with query in pre-condition");
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Pre-condition addition not needed");
+        }
+    }
 }
