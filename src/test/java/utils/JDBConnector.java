@@ -15,7 +15,7 @@ public class JDBConnector {
     private static final JsonObject QUERIES = JsonReader.getDataFromFile("queries.json");
     private static final String CONNECTION_PARAMS_DRAFT = "jdbc:mysql://localhost:%d/%s";
     private static final Connection connection = connectDatabase();
-    private static final Statement statement = createStatement(connection);
+    private static final Statement statement = createStatement();
 
     private static Connection connectDatabase() {
         try {
@@ -43,7 +43,7 @@ public class JDBConnector {
         return connection;
     }
 
-    private static Statement createStatement(Connection connection) {
+    private static Statement createStatement() {
         try {
             return connection.createStatement();
         } catch (SQLException e) {
@@ -76,7 +76,7 @@ public class JDBConnector {
         insertQueryDraft.append(");");
     }
 
-    public static void addEntity(TestEntry testEntry) {
+    public static void add(TestEntry testEntry) {
         List<Serializable> fields = testEntry.getFields();
         StringBuilder insertQueryDraft = new StringBuilder(QUERIES.get("insert").getAsString());
 
@@ -95,18 +95,7 @@ public class JDBConnector {
     }
 
     public static TestEntry checkForPresenceAndReturnEntry(TestEntry testEntry) {
-        String checkForPresenceQuery = String.format(
-                QUERIES.get("check_for_presence").getAsString(),
-                CONFIG.get("table").getAsString(),
-                testEntry.getName(),
-                testEntry.getStatusId(),
-                testEntry.getMethodName(),
-                testEntry.getProjectId(),
-                testEntry.getSessionId(),
-                testEntry.getStartTime(),
-                testEntry.getEndTime(),
-                testEntry.getEnv(),
-                testEntry.getBrowser());
+        String checkForPresenceQuery = getString(testEntry);
 
         try {
             ResultSet resultSet = Objects.requireNonNull(statement).executeQuery(checkForPresenceQuery);
@@ -117,6 +106,20 @@ public class JDBConnector {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private static String getString(TestEntry testEntry) {
+        return String.format(
+                QUERIES.get("check_for_presence").getAsString(),
+                testEntry.getName(),
+                testEntry.getStatusId(),
+                testEntry.getMethodName(),
+                testEntry.getProjectId(),
+                testEntry.getSessionId(),
+                testEntry.getStartTime(),
+                testEntry.getEndTime(),
+                testEntry.getEnv(),
+                testEntry.getBrowser());
     }
 
     private static TestEntry getTestEntry(ResultSet resultSet) throws SQLException {
@@ -130,7 +133,8 @@ public class JDBConnector {
                 resultSet.getString("start_time").replaceAll("\\.[0-9]+", ""),
                 resultSet.getString("end_time").replaceAll("\\.[0-9]+", ""),
                 resultSet.getString("env"),
-                resultSet.getString("browser"));
+                resultSet.getString("browser"),
+                resultSet.getInt("author_id"));
     }
 
 
@@ -139,13 +143,12 @@ public class JDBConnector {
 
         String selectCondition = String.format(
                 QUERIES.get("select_condition").getAsString(),
-                CONFIG.get("table").getAsString(),
                 randomIntFromZeroToNine,
                 randomIntFromZeroToNine);
 
         try {
             ResultSet resultSet = Objects.requireNonNull(statement).executeQuery(selectCondition);
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 returnList.add(
                         getTestEntry(resultSet)
                 );
@@ -205,5 +208,60 @@ public class JDBConnector {
         } else {
             System.out.println("Pre-condition addition not needed");
         }
+    }
+
+    public static void update(TestEntry testEntry) {
+        String updateTestEntryDraft = QUERIES.get("update_test_entry").getAsString();
+        String updateQuery = String.format(updateTestEntryDraft,
+                testEntry.getStatusId(),
+                testEntry.getStartTime(),
+                testEntry.getEndTime(),
+                testEntry.getId());
+        try {
+            Objects.requireNonNull(statement).executeUpdate(updateQuery);
+            System.out.println("Row updated");
+        } catch (SQLException e) {
+            System.err.println("Problem with query");
+            e.printStackTrace();
+        }
+    }
+
+    public static TestEntry getByID(int id) {
+        String getTestEntryDraft = QUERIES.get("select_by_id").getAsString();
+        String getQuery = String.format(getTestEntryDraft, id);
+        try {
+            ResultSet resultSet = Objects.requireNonNull(statement).executeQuery(getQuery);
+            resultSet.next();
+            return getTestEntry(resultSet);
+        } catch (SQLException e) {
+            System.err.println("Problem with query");
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void delete(TestEntry testEntry) {
+        String deleteTestEntryDraft = QUERIES.get("delete_test_entry").getAsString();
+        String deleteQuery = String.format(deleteTestEntryDraft, testEntry.getId());
+        try {
+            Objects.requireNonNull(statement).executeUpdate(deleteQuery);
+            System.out.println("Row deleted");
+        } catch (SQLException e) {
+            System.err.println("Problem with query");
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean checkIfPresentById(int id) {
+        String getTestEntryDraft = QUERIES.get("select_by_id").getAsString();
+        String getQuery = String.format(getTestEntryDraft, id);
+        try {
+            ResultSet resultSet = Objects.requireNonNull(statement).executeQuery(getQuery);
+            return resultSet.next();
+        } catch (SQLException e) {
+            System.err.println("Problem with query");
+            e.printStackTrace();
+        }
+        return false;
     }
 }

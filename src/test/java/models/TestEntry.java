@@ -6,13 +6,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-public class TestEntry {
+public class TestEntry implements Cloneable {
 
     public TestEntry() {
     }
 
     public TestEntry(int id, String name, int statusId, String methodName, int projectId, int sessionId,
-                     String startTime, String endTime, String env, String browser) {
+                     String startTime, String endTime, String env, String browser, int authorId) {
         this.id = id;
         this.name = name;
         this.statusId = statusId;
@@ -23,6 +23,7 @@ public class TestEntry {
         this.endTime = endTime;
         this.env = env;
         this.browser = browser;
+        this.authorId = authorId;
     }
 
     private int id;
@@ -129,13 +130,13 @@ public class TestEntry {
         return new LinkedList<>(
                 List.of(name, statusId, methodName,
                         projectId, sessionId, startTime,
-                        endTime, env, browser));
+                        endTime, env, browser, authorId));
     }
 
     @Override
     public String toString() {
-        return String.format("TestEntry{id=%d, name='%s' , status_id=%d , method_name='%s' , project_id=%d , session_id=%d , start_time=%s , end_time=%s , env='%s' , browser='%s'} ",
-                id, name, statusId, methodName, projectId, sessionId, startTime, endTime, env, browser);
+        return String.format("TestEntry{id=%d, name='%s' , status_id=%d , method_name='%s' , project_id=%d , session_id=%d , start_time=%s , end_time=%s , env='%s' , browser='%s', author_id=%d} ",
+                id, name, statusId, methodName, projectId, sessionId, startTime, endTime, env, browser, authorId);
     }
 
     @Override
@@ -143,7 +144,8 @@ public class TestEntry {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TestEntry testEntry = (TestEntry) o;
-        return statusId == testEntry.statusId &&
+        return authorId == testEntry.authorId &&
+                statusId == testEntry.statusId &&
                 projectId == testEntry.projectId &&
                 sessionId == testEntry.sessionId &&
                 name.equals(testEntry.name) &&
@@ -156,6 +158,15 @@ public class TestEntry {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, statusId, methodName, projectId, sessionId, startTime, endTime, env, browser);
+        return Objects.hash(name, statusId, methodName, projectId, sessionId, startTime, endTime, env, browser, authorId);
+    }
+
+    @Override
+    public TestEntry clone() {
+        try {
+            return (TestEntry) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }
