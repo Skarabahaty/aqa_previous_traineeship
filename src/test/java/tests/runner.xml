@@ -1,0 +1,13 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="MySQL tests" >
+    <test name="Get test results and insert into database" >
+        <classes>
+            <class name="tests.TestCase1GetTestResultAndInsertItIntoDatabase" />
+        </classes>
+    </test>
+    <test name="Select like pattern, update and delete from database" >
+        <classes>
+            <class name="tests.TestCase2SelectModifyAndDeleteEntries" />
+        </classes>
+    </test>
+</suite>

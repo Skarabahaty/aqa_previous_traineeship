@@ -11,13 +11,16 @@ import java.util.List;
 public class JDBConnector {
     
     static{
+        CONFIG = JsonReader.getDataFromFile("configs.json");
+        QUERIES = JsonReader.getDataFromFile("queries.json");
+        CONNECTION_PARAMS_DRAFT = "jdbc:mysql://localhost:%d/%s";
         connection = connectDatabase();
         statement = createStatement();
     }
-    
-    private static final JsonObject CONFIG = JsonReader.getDataFromFile("configs.json");
-    private static final JsonObject QUERIES = JsonReader.getDataFromFile("queries.json");
-    private static final String CONNECTION_PARAMS_DRAFT = "jdbc:mysql://localhost:%d/%s";
+
+    private static final JsonObject CONFIG;
+    private static final JsonObject QUERIES;
+    private static final String CONNECTION_PARAMS_DRAFT;
     private static final Connection connection;
     private static final Statement statement;
 
