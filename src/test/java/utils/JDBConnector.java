@@ -3,19 +3,147 @@ package utils;
 import com.google.gson.JsonObject;
 import models.TestEntry;
 
-import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class JDBConnector {
+    
+    static{
+        connection = connectDatabase();
+        statement = createStatement();
+    }
+    
     private static final JsonObject CONFIG = JsonReader.getDataFromFile("configs.json");
     private static final JsonObject QUERIES = JsonReader.getDataFromFile("queries.json");
     private static final String CONNECTION_PARAMS_DRAFT = "jdbc:mysql://localhost:%d/%s";
-    private static final Connection connection = connectDatabase();
-    private static final Statement statement = createStatement();
+    private static final Connection connection;
+    private static final Statement statement;
+
+    public static void add(TestEntry testEntry) {
+        String queryDraft = QUERIES.get("insert").getAsString();
+        String insertQueryDraft = TestEntryUtil.constructInsertQueryDraft(testEntry, queryDraft);
+        String insertQuery = String.format(insertQueryDraft,
+                CONFIG.get("table").getAsString());
+        try {
+            int executeUpdate = statement.executeUpdate(insertQuery);
+            System.out.println("Addition successful, number of added entries: " + executeUpdate);
+        } catch (SQLException e) {
+            System.err.println("Problem with query");
+            e.printStackTrace();
+        }
+    }
+
+    public static TestEntry checkForPresenceAndReturnEntry(TestEntry testEntry) {
+        String checkForPresenceQuery = getCheckForPresenceQueryFromTestEntry(testEntry);
+        try {
+            ResultSet resultSet = statement.executeQuery(checkForPresenceQuery);
+            resultSet.next();
+            return TestEntryUtil.getTestEntry(resultSet);
+        } catch (SQLException e) {
+            System.err.println("Problem with query");
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static List<TestEntry> getTestEntriesBasedOnID(int randomIntFromZeroToNine) {
+        String selectCondition = String.format(
+                QUERIES.get("select_condition").getAsString(),
+                CONFIG.get("table").getAsString(),
+                randomIntFromZeroToNine,
+                randomIntFromZeroToNine);
+        try {
+            ResultSet resultSet = statement.executeQuery(selectCondition);
+            List<TestEntry> returnList = new ArrayList<>();
+            while (resultSet.next()) {
+                returnList.add(
+                        TestEntryUtil.getTestEntry(resultSet)
+                );
+            }
+            return returnList;
+        } catch (SQLException e) {
+            System.err.println("Problem with query");
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void insertNeededFieldsInTable() {
+        if (isAdditionNeeded()) {
+            String insertProjectId = QUERIES.get("insert_project_id").getAsString();
+            String insertAuthorId = QUERIES.get("insert_author_id").getAsString();
+            String insertSessionId = QUERIES.get("insert_session_id").getAsString();
+            try {
+                statement.executeUpdate(insertProjectId);
+                statement.executeUpdate(insertAuthorId);
+                statement.executeUpdate(insertSessionId);
+                System.out.println("Pre-condition addition successful");
+            } catch (SQLException e) {
+                System.err.println("Problem with query in pre-condition");
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Pre-condition addition not needed");
+        }
+    }
+
+    public static void update(TestEntry testEntry) {
+        String updateQuery = String.format(
+                QUERIES.get("update_test_entry").getAsString(),
+                CONFIG.get("table").getAsString(),
+                testEntry.getStatusId(),
+                testEntry.getStartTime(),
+                testEntry.getEndTime(),
+                testEntry.getId());
+        try {
+            statement.executeUpdate(updateQuery);
+            System.out.println("Row updated");
+        } catch (SQLException e) {
+            System.err.println("Problem with query");
+            e.printStackTrace();
+        }
+    }
+
+    public static TestEntry selectByID(int id) {
+        String getTestEntryDraft = QUERIES.get("select_by_id").getAsString();
+        String getQuery = String.format(getTestEntryDraft, CONFIG.get("table").getAsString(), id);
+        try {
+            ResultSet resultSet = statement.executeQuery(getQuery);
+            resultSet.next();
+            return TestEntryUtil.getTestEntry(resultSet);
+        } catch (SQLException e) {
+            System.err.println("Problem with query");
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void delete(TestEntry testEntry) {
+        String deleteTestEntryDraft = QUERIES.get("delete_test_entry").getAsString();
+        String deleteQuery = String.format(deleteTestEntryDraft, CONFIG.get("table").getAsString(), testEntry.getId());
+        try {
+            statement.executeUpdate(deleteQuery);
+            System.out.println("Row deleted");
+        } catch (SQLException e) {
+            System.err.println("Problem with query");
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean checkIfPresentById(int id) {
+        String getTestEntryDraft = QUERIES.get("select_by_id").getAsString();
+        String getQuery = String.format(getTestEntryDraft, CONFIG.get("table").getAsString(), id);
+        try {
+            ResultSet resultSet = statement.executeQuery(getQuery);
+            return resultSet.next();
+        } catch (SQLException e) {
+            System.err.println("Problem with query");
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     private static Connection connectDatabase() {
         try {
@@ -53,64 +181,10 @@ public class JDBConnector {
         return null;
     }
 
-    private static void constructInsertQueryDraft(List<Serializable> fields, StringBuilder insertQueryDraft) {
-        insertQueryDraft.append("(");
-        int size = fields.size();
-        for (int i = 0; i < size; i++) {
-            Serializable serializable = fields.get(i);
-            switch (serializable.getClass().getSimpleName()) {
-                case "String":
-                case "Timestamp":
-                    insertQueryDraft.append("'").append(serializable).append("'");
-                    break;
-                case "Integer":
-                case "Long":
-                    insertQueryDraft.append(serializable);
-                    break;
-            }
-
-            if (size - i > 1) {
-                insertQueryDraft.append(", ");
-            }
-        }
-        insertQueryDraft.append(");");
-    }
-
-    public static void add(TestEntry testEntry) {
-        List<Serializable> fields = testEntry.getFields();
-        StringBuilder insertQueryDraft = new StringBuilder(QUERIES.get("insert").getAsString());
-
-        constructInsertQueryDraft(fields, insertQueryDraft);
-
-        String insertQuery = String.format(insertQueryDraft.toString(),
-                CONFIG.get("table").getAsString());
-
-        try {
-            int executeUpdate = Objects.requireNonNull(statement).executeUpdate(insertQuery);
-            System.out.println("Addition successful, number of added entries: " + executeUpdate);
-        } catch (SQLException e) {
-            System.err.println("Problem with query");
-            e.printStackTrace();
-        }
-    }
-
-    public static TestEntry checkForPresenceAndReturnEntry(TestEntry testEntry) {
-        String checkForPresenceQuery = getString(testEntry);
-
-        try {
-            ResultSet resultSet = Objects.requireNonNull(statement).executeQuery(checkForPresenceQuery);
-            resultSet.next();
-            return getTestEntry(resultSet);
-        } catch (SQLException e) {
-            System.err.println("Problem with query");
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private static String getString(TestEntry testEntry) {
+    private static String getCheckForPresenceQueryFromTestEntry(TestEntry testEntry) {
         return String.format(
                 QUERIES.get("check_for_presence").getAsString(),
+                CONFIG.get("table").getAsString(),
                 testEntry.getName(),
                 testEntry.getStatusId(),
                 testEntry.getMethodName(),
@@ -122,59 +196,20 @@ public class JDBConnector {
                 testEntry.getBrowser());
     }
 
-    private static TestEntry getTestEntry(ResultSet resultSet) throws SQLException {
-        return new TestEntry(
-                resultSet.getInt("id"),
-                resultSet.getString("name"),
-                resultSet.getInt("status_id"),
-                resultSet.getString("method_name"),
-                resultSet.getInt("project_id"),
-                resultSet.getInt("session_id"),
-                resultSet.getString("start_time").replaceAll("\\.[0-9]+", ""),
-                resultSet.getString("end_time").replaceAll("\\.[0-9]+", ""),
-                resultSet.getString("env"),
-                resultSet.getString("browser"),
-                resultSet.getInt("author_id"));
-    }
-
-
-    public static List<TestEntry> getTestEntriesBasedOnID(int randomIntFromZeroToNine) {
-        List<TestEntry> returnList = new ArrayList<>();
-
-        String selectCondition = String.format(
-                QUERIES.get("select_condition").getAsString(),
-                randomIntFromZeroToNine,
-                randomIntFromZeroToNine);
-
-        try {
-            ResultSet resultSet = Objects.requireNonNull(statement).executeQuery(selectCondition);
-            while (resultSet.next()) {
-                returnList.add(
-                        getTestEntry(resultSet)
-                );
-            }
-            return returnList;
-        } catch (SQLException e) {
-            System.err.println("Problem with query");
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     private static boolean isAdditionNeeded() {
         String selectProjectCheck = QUERIES.get("select_project_check").getAsString();
         String selectAuthorCheck = QUERIES.get("select_author_check").getAsString();
         String selectSessionCheck = QUERIES.get("select_session_check").getAsString();
         try {
-            ResultSet projectResultSet = Objects.requireNonNull(statement).executeQuery(selectProjectCheck);
+            ResultSet projectResultSet = statement.executeQuery(selectProjectCheck);
             boolean projectHasEntries = projectResultSet.next();
             projectResultSet.close();
 
-            ResultSet authorResultSet = Objects.requireNonNull(statement).executeQuery(selectAuthorCheck);
+            ResultSet authorResultSet = statement.executeQuery(selectAuthorCheck);
             boolean authorHasEntries = authorResultSet.next();
             authorResultSet.close();
 
-            ResultSet sessionResultSet = Objects.requireNonNull(statement).executeQuery(selectSessionCheck);
+            ResultSet sessionResultSet = statement.executeQuery(selectSessionCheck);
             boolean sessionHasEntries = sessionResultSet.next();
             sessionResultSet.close();
 
@@ -186,80 +221,6 @@ public class JDBConnector {
             }
         } catch (SQLException e) {
             System.err.println("Problem with query in pre-condition");
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public static void insertNeededFieldsInTable() {
-        if (isAdditionNeeded()) {
-            String insertProjectId = QUERIES.get("insert_project_id").getAsString();
-            String insertAuthorId = QUERIES.get("insert_author_id").getAsString();
-            String insertSessionId = QUERIES.get("insert_session_id").getAsString();
-            try {
-                Objects.requireNonNull(statement).executeUpdate(insertProjectId);
-                Objects.requireNonNull(statement).executeUpdate(insertAuthorId);
-                Objects.requireNonNull(statement).executeUpdate(insertSessionId);
-                System.out.println("Pre-condition addition successful");
-            } catch (SQLException e) {
-                System.err.println("Problem with query in pre-condition");
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("Pre-condition addition not needed");
-        }
-    }
-
-    public static void update(TestEntry testEntry) {
-        String updateTestEntryDraft = QUERIES.get("update_test_entry").getAsString();
-        String updateQuery = String.format(updateTestEntryDraft,
-                testEntry.getStatusId(),
-                testEntry.getStartTime(),
-                testEntry.getEndTime(),
-                testEntry.getId());
-        try {
-            Objects.requireNonNull(statement).executeUpdate(updateQuery);
-            System.out.println("Row updated");
-        } catch (SQLException e) {
-            System.err.println("Problem with query");
-            e.printStackTrace();
-        }
-    }
-
-    public static TestEntry getByID(int id) {
-        String getTestEntryDraft = QUERIES.get("select_by_id").getAsString();
-        String getQuery = String.format(getTestEntryDraft, id);
-        try {
-            ResultSet resultSet = Objects.requireNonNull(statement).executeQuery(getQuery);
-            resultSet.next();
-            return getTestEntry(resultSet);
-        } catch (SQLException e) {
-            System.err.println("Problem with query");
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public static void delete(TestEntry testEntry) {
-        String deleteTestEntryDraft = QUERIES.get("delete_test_entry").getAsString();
-        String deleteQuery = String.format(deleteTestEntryDraft, testEntry.getId());
-        try {
-            Objects.requireNonNull(statement).executeUpdate(deleteQuery);
-            System.out.println("Row deleted");
-        } catch (SQLException e) {
-            System.err.println("Problem with query");
-            e.printStackTrace();
-        }
-    }
-
-    public static boolean checkIfPresentById(int id) {
-        String getTestEntryDraft = QUERIES.get("select_by_id").getAsString();
-        String getQuery = String.format(getTestEntryDraft, id);
-        try {
-            ResultSet resultSet = Objects.requireNonNull(statement).executeQuery(getQuery);
-            return resultSet.next();
-        } catch (SQLException e) {
-            System.err.println("Problem with query");
             e.printStackTrace();
         }
         return false;

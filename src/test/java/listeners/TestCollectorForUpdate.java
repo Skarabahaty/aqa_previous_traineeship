@@ -21,7 +21,7 @@ public class TestCollectorForUpdate {
         List<TestEntry> testEntriesAfterChangesFromDatabase = new ArrayList<>();
         for (TestEntry changedTestEntry : changedTestEntries) {
             int id = changedTestEntry.getId();
-            TestEntry testEntry = JDBConnector.getByID(id);
+            TestEntry testEntry = JDBConnector.selectByID(id);
             testEntriesAfterChangesFromDatabase.add(testEntry);
         }
         boolean equals = TestCase2SelectModifyAndDeleteEntries.initialEntryList.equals(testEntriesAfterChangesFromDatabase);
