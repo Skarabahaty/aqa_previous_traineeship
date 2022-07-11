@@ -1,15 +1,12 @@
-package tests;
+package utils.sandbox;
 
-import listeners.TestCollectorForUpdate;
 import models.TestEntry;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import utils.JDBConnector;
 import utils.Randomizer;
-import utils.TestEntryUtil;
 
 import java.util.List;
 
@@ -28,9 +25,9 @@ public class TestCase2SelectModifyAndDeleteEntries {
 
     @BeforeClass
     public void setUp() {
-        JDBConnector.insertNeededFieldsInTable();
+        TestEntryUtil.insertNeededFieldsInTable();
         int randomIntFromZeroToNine = Randomizer.getRandomIntFromZeroToNine();
-        initialEntryList = JDBConnector.getTestEntriesBasedOnID(randomIntFromZeroToNine);
+        initialEntryList = TestEntryUtil.getTestEntriesBasedOnID(randomIntFromZeroToNine);
     }
 
     @Test(dataProvider = "provideData")

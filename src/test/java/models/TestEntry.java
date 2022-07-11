@@ -8,7 +8,13 @@ import java.util.Objects;
 
 public class TestEntry implements Cloneable {
 
-    public TestEntry() {
+    public TestEntry(String testName, int session, int project, int author, String browser, String env) {
+        this.name = testName;
+        this.sessionId = session;
+        this.projectId = project;
+        this.authorId = author;
+        this.browser = browser;
+        this.env = env;
     }
 
     public TestEntry(int id, String name, int statusId, String methodName, int projectId, int sessionId,
@@ -26,17 +32,17 @@ public class TestEntry implements Cloneable {
         this.authorId = authorId;
     }
 
+    private int projectId;
     private int id;
-    private String name = "test";
+    private String name;
     private int statusId;
     private String methodName;
-    private int projectId = 7;
-    private int sessionId = 21;
+    private int sessionId;
     private String startTime;
     private String endTime;
-    private String env = "env";
-    private String browser = "browser";
-    private int authorId = 1;
+    private String env;
+    private String browser;
+    private int authorId;
 
     public int getId() {
         return id;
@@ -91,7 +97,7 @@ public class TestEntry implements Cloneable {
     }
 
     public void setStartTime(long startTime) {
-        this.startTime = new Timestamp(startTime).toString().replaceAll("\\.[0-9]+", "");
+        this.startTime = new Timestamp(startTime).toString().replaceAll("\\.\\d+", "");
     }
 
     public String getEndTime() {
@@ -99,7 +105,7 @@ public class TestEntry implements Cloneable {
     }
 
     public void setEndTime(long endTime) {
-        this.endTime = new Timestamp(endTime).toString().replaceAll("\\.[0-9]+", "");
+        this.endTime = new Timestamp(endTime).toString().replaceAll("\\.\\d+", "");
     }
 
     public String getEnv() {

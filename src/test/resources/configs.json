@@ -1,7 +1,0 @@
-{
-  "port": 3306,
-  "schema": "union_reporting",
-  "user": "root",
-  "password": 31415,
-  "table" : "test"
-}

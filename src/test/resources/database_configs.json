@@ -1,0 +1,11 @@
+{
+  "connection_params_draft" : "%s//%s:%d/%s",
+  "driver": "com.mysql.cj.jdbc.Driver",
+  "address": "localhost",
+  "connection_type": "jdbc:mysql:",
+  "port": 3306,
+  "schema": "union_reporting",
+  "user": "root",
+  "password": 31415,
+  "table": "test"
+}

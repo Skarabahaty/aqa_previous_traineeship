@@ -1,8 +1,6 @@
-package listeners;
+package utils.sandbox;
 
 import models.TestEntry;
-import tests.TestCase2SelectModifyAndDeleteEntries;
-import utils.JDBConnector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +11,7 @@ public class TestCollectorForUpdate {
 
     public static void updateTestEntries() {
         for (TestEntry testEntry : changedTestEntries) {
-            JDBConnector.update(testEntry);
+            TestEntryUtil.update(testEntry);
         }
     }
 
@@ -21,7 +19,7 @@ public class TestCollectorForUpdate {
         List<TestEntry> testEntriesAfterChangesFromDatabase = new ArrayList<>();
         for (TestEntry changedTestEntry : changedTestEntries) {
             int id = changedTestEntry.getId();
-            TestEntry testEntry = JDBConnector.selectByID(id);
+            TestEntry testEntry = TestEntryUtil.selectByID(id);
             testEntriesAfterChangesFromDatabase.add(testEntry);
         }
         boolean equals = TestCase2SelectModifyAndDeleteEntries.initialEntryList.equals(testEntriesAfterChangesFromDatabase);
@@ -30,14 +28,14 @@ public class TestCollectorForUpdate {
 
     public static void deleteTestEntries() {
         for (TestEntry testEntry : changedTestEntries) {
-            JDBConnector.delete(testEntry);
+            TestEntryUtil.delete(testEntry);
         }
     }
 
     public static boolean isEntriesDeleted() {
         for (TestEntry changedTestEntry : changedTestEntries) {
             int id = changedTestEntry.getId();
-            if (JDBConnector.checkIfPresentById(id)) {
+            if (TestEntryUtil.checkIfPresentById(id)) {
                 return false;
             }
         }

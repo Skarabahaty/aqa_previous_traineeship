@@ -1,0 +1,12 @@
+{
+  "author": {
+    "name" : "Maksim",
+    "login" : "Lorem",
+    "email" : "Ipsum"
+  },
+  "session_random_number_border": 5,
+  "project": "TestProject",
+  "browser": "browser",
+  "env": "env",
+  "test_name": "Usual test for usual guys"
+}
