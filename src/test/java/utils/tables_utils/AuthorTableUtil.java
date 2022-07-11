@@ -1,5 +1,6 @@
 package utils.tables_utils;
 
+import com.google.gson.JsonObject;
 import models.Author;
 
 import java.io.Serializable;
@@ -12,6 +13,7 @@ public class AuthorTableUtil extends TableUtil {
     static {
         TEST_TABLE = "author";
     }
+    private static final String TEST_TABLE;
 
     public static void add(Author author) {
         String queryDraft = QUERIES.get("insert_into_author").getAsString();
@@ -79,5 +81,15 @@ public class AuthorTableUtil extends TableUtil {
             e.printStackTrace();
             throw new RuntimeException("Problem wit query");
         }
+    }
+
+    public static Author getAuthorAndAddItInDB() {
+        JsonObject authorData = TEST_CONFIGS.get("author").getAsJsonObject();
+        Author author = new Author(authorData);
+        if (! isAuthorPresentInDatabase(author)) {
+            add(author);
+        }
+        checkForPresenceAndSetID(author);
+        return author;
     }
 }

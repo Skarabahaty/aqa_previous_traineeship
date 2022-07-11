@@ -1,9 +1,5 @@
 package models;
 
-import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.List;
-
 public class Project {
 
     private int id;
@@ -23,9 +19,5 @@ public class Project {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public List<Serializable> getFields() {
-        return new LinkedList<>(List.of(name));
     }
 }

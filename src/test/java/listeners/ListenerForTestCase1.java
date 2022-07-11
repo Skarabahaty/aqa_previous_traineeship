@@ -1,6 +1,5 @@
 package listeners;
 
-import com.google.gson.JsonObject;
 import models.Author;
 import models.Project;
 import models.Session;
@@ -9,7 +8,6 @@ import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
-import utils.JsonReader;
 import utils.tables_utils.AuthorTableUtil;
 import utils.tables_utils.ProjectTableUtil;
 import utils.tables_utils.SessionTableUtil;
@@ -17,38 +15,20 @@ import utils.tables_utils.TestTableUtil;
 
 public class ListenerForTestCase1 implements ITestListener {
 
-
     private TestEntry testEntry;
 
     @Override
     public void onStart(ITestContext context) {
-        JsonObject dataFromFile = JsonReader.getDataFromFile("test_configs.json");
 
-        int randomBuildNumber = dataFromFile.get("session_random_number_border").getAsInt();
-        Session session = new Session(randomBuildNumber);
-        SessionTableUtil.add(session);
-        SessionTableUtil.checkForPresenceAndSetID(session);
+        Session session = SessionTableUtil.getSessionAndAddItInDB();
 
-        JsonObject authorData = dataFromFile.get("author").getAsJsonObject();
-        Author author = new Author(authorData);
-        if (! AuthorTableUtil.isAuthorPresentInDatabase(author)) {
-            AuthorTableUtil.add(author);
-        }
-        AuthorTableUtil.checkForPresenceAndSetID(author);
+        Author author = AuthorTableUtil.getAuthorAndAddItInDB();
 
-        String projectName = dataFromFile.get("project").getAsString();
-        Project project = new Project(projectName);
-        if (!ProjectTableUtil.isProjectPresentInDatabase(project)) {
-            ProjectTableUtil.add(project);
-        }
-        ProjectTableUtil.checkForPresenceAndSetID(project);
+        Project project = ProjectTableUtil.getProjectAndAddTiInDB();
 
-        String browser = dataFromFile.get("browser").getAsString();
-        String env = dataFromFile.get("env").getAsString();
-        String testName = dataFromFile.get("test_name").getAsString();
-
-        testEntry = new TestEntry(testName, session.getId(), project.getId(), author.getId(), browser, env);
+        testEntry = TestTableUtil.getTestEntry(session, author, project);
     }
+
 
     @Override
     public void onTestStart(ITestResult result) {

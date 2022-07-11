@@ -8,5 +8,5 @@
   "project": "TestProject",
   "browser": "browser",
   "env": "env",
-  "test_name": "Usual test for usual guys"
+  "test_name": "Usual test"
 }

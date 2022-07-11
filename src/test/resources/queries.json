@@ -11,12 +11,6 @@
 
   "select_condition" : "SELECT * from %s WHERE id LIKE '%%%d%%%d%%' LIMIT 10",
 
-  "insert_project_id": "INSERT INTO project (name) VALUES ('TestProject')",
-  "insert_author_id": "INSERT INTO author (name, login, email) VALUES ('Maksim', 'lorem', 'ipsum')",
-  "insert_session_id": "INSERT INTO session (session_key, build_number) VALUES ('123', '1')",
-  "select_project_check": "SELECT * FROM project WHERE name = 'TestProject'",
-  "select_author_check": "SELECT * FROM author WHERE name = 'Maksim'",
-  "select_session_check": "SELECT * FROM session WHERE session_key = '123'",
   "update_test_entry": "UPDATE %s SET status_id = %d, start_time = '%s', end_time = '%s' WHERE id = %d",
   "delete_test_entry": "DELETE FROM %s WHERE id = %d",
   "select_by_id": "SELECT * FROM %s WHERE id = %d"

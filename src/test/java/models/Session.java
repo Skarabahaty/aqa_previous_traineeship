@@ -1,17 +1,18 @@
 package models;
 
+import utils.Randomizer;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class Session {
 
-    public Session(int buildNumber) {
+    public Session(int border) {
         sessionKey = new Timestamp(System.currentTimeMillis()).toString().replaceAll("\\.\\d+", "");
         createdTime = new Timestamp(System.currentTimeMillis()).toString().replaceAll("\\.\\d+", "");
-        this.buildNumber = ThreadLocalRandom.current().nextInt(1, buildNumber);
+        this.buildNumber = Randomizer.getRandomIntFromOneToBorder(border);
     }
 
     private int id;

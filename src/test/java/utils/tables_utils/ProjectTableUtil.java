@@ -10,6 +10,8 @@ public class ProjectTableUtil extends TableUtil {
     static {
         TEST_TABLE = "project";
     }
+    private static final String TEST_TABLE;
+
     public static void add(Project project) {
         String queryDraft = QUERIES.get("insert_into_project").getAsString();
         String insertQueryDraft = constructInsertQueryDraft(project, queryDraft);
@@ -54,5 +56,15 @@ public class ProjectTableUtil extends TableUtil {
             e.printStackTrace();
             throw new RuntimeException("Problem wit query");
         }
+    }
+
+    public static Project getProjectAndAddTiInDB() {
+        String projectName = TEST_CONFIGS.get("project").getAsString();
+        Project project = new Project(projectName);
+        if (! isProjectPresentInDatabase(project)) {
+            add(project);
+        }
+        checkForPresenceAndSetID(project);
+        return project;
     }
 }

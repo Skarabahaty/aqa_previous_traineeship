@@ -12,6 +12,8 @@ public class SessionTableUtil extends TableUtil {
     static {
         TEST_TABLE = "session";
     }
+    private static final String TEST_TABLE;
+
     public static void add(Session session) {
         String queryDraft = QUERIES.get("insert_into_session").getAsString();
         String insertQueryDraft = constructInsertQueryDraft(session, queryDraft);
@@ -82,5 +84,13 @@ public class SessionTableUtil extends TableUtil {
                 session.getSessionKey(),
                 session.getCreatedTime(),
                 session.getBuildNumber());
+    }
+
+    public static Session getSessionAndAddItInDB() {
+        int anInt = TEST_CONFIGS.get("session_random_number_border").getAsInt();
+        Session session = new Session(anInt);
+        add(session);
+        checkForPresenceAndSetID(session);
+        return session;
     }
 }

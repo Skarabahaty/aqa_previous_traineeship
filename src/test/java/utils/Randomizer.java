@@ -11,4 +11,8 @@ public class Randomizer {
     public static int getRandomIntFromZeroToNine() {
         return localRandom.nextInt(10);
     }
+
+    public static int getRandomIntFromOneToBorder(int border) {
+        return localRandom.nextInt(1, border + 1);
+    }
 }
