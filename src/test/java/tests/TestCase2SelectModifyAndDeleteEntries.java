@@ -16,8 +16,12 @@ import java.util.List;
 
 public class TestCase2SelectModifyAndDeleteEntries {
 
+    {
+        changedEntries = new ArrayList<>();
+    }
+
     private List<TestEntry> initialEntries;
-    private final List<TestEntry> changedEntries = new ArrayList<>();
+    private final List<TestEntry> changedEntries;
     private HashMap<String, Integer> iDs;
 
     @DataProvider
@@ -33,8 +37,11 @@ public class TestCase2SelectModifyAndDeleteEntries {
     @BeforeClass
     public void setUp() {
         int randomIntFromZeroToNine = Randomizer.getRandomIntFromZeroToNine();
-        initialEntries = TestTableUtil.getTestEntriesBasedOnID(randomIntFromZeroToNine);
-        iDs = TestTableUtil.initializeDBAndReturnNeededIDs();
+        do {
+            initialEntries = TestTableUtil.getTestEntriesBasedOnID(randomIntFromZeroToNine);
+        } while (initialEntries.size() == 0);
+
+        iDs = TestTableUtil.initializeDatabaseAndReturnNeededIDs();
     }
 
     @Test(dataProvider = "provideData")

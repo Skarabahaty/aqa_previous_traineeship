@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class AuthorTableUtil extends TableUtil {
+public class AuthorTableUtil extends AbstractUtil {
 
     static {
         TEST_TABLE = "author";

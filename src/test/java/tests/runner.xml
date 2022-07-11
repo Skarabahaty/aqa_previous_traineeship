@@ -7,7 +7,7 @@
     </test>
     <test name="Select like pattern, update and delete from database" >
         <classes>
-            <class name="utils.sandbox.TestCase2SelectModifyAndDeleteEntries" />
+            <class name="tests.TestCase2SelectModifyAndDeleteEntries" />
         </classes>
     </test>
 </suite>

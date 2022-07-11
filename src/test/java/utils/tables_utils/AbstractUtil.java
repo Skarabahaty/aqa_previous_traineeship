@@ -6,7 +6,7 @@ import utils.JsonReader;
 
 import java.sql.Statement;
 
-public abstract class TableUtil {
+public abstract class AbstractUtil {
 
     protected static final JsonObject QUERIES = JsonReader.getDataFromFile("queries.json");
     protected static final Statement STATEMENT = JDBConnector.getStatement();

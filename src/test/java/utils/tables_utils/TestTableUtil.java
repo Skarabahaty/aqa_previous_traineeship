@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-public class TestTableUtil extends TableUtil {
+public class TestTableUtil extends AbstractUtil {
 
     static {
         TEST_TABLE = "test";
@@ -99,7 +99,7 @@ public class TestTableUtil extends TableUtil {
                 resultSet.getInt("author_id"));
     }
 
-    public static HashMap<String, Integer> initializeDBAndReturnNeededIDs() {
+    public static HashMap<String, Integer> initializeDatabaseAndReturnNeededIDs() {
         Session session = SessionTableUtil.getSessionAndAddItInDB();
         Project project = ProjectTableUtil.getProjectAndAddTiInDB();
         Author author = AuthorTableUtil.getAuthorAndAddItInDB();

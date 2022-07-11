@@ -5,7 +5,7 @@ import models.Project;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ProjectTableUtil extends TableUtil {
+public class ProjectTableUtil extends AbstractUtil {
 
     static {
         TEST_TABLE = "project";

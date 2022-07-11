@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class SessionTableUtil extends TableUtil {
+public class SessionTableUtil extends AbstractUtil {
 
     static {
         TEST_TABLE = "session";
