@@ -1,11 +1,13 @@
 package tests;
 
+import com.google.gson.JsonObject;
 import models.TestEntry;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import utils.JsonReader;
 import utils.Randomizer;
 import utils.entry_utils.TestEntriesUpdaterDeleter;
 import utils.entry_utils.TestRunSimulator;
@@ -25,6 +27,8 @@ public class TestCase2SelectModifyAndDeleteEntries {
     private List<TestEntry> initialEntries;
     private final List<TestEntry> changedEntries;
     private Map<String, Integer> iDs;
+    private final JsonObject config = JsonReader.getDataFromFile("test_ng_config.json");
+
 
     @BeforeClass
     public void setUp() {
@@ -38,10 +42,10 @@ public class TestCase2SelectModifyAndDeleteEntries {
 
     @DataProvider
     private Object[][] provideData() {
-        Object[][] objects = new Object[initialEntries.size()][2];
+        int fieldsNumber = config.get("fields_number").getAsInt();
+        Object[][] objects = new Object[initialEntries.size()][fieldsNumber];
         for (int i = 0; i < objects.length; i++) {
-            objects[i][0] = initialEntries.get(i);
-            objects[i][1] = iDs;
+            objects[i] = List.of(initialEntries.get(i), iDs).toArray();
         }
         return objects;
     }
