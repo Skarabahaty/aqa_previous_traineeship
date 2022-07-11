@@ -7,12 +7,14 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import utils.Randomizer;
-import utils.TestCollectorForUpdate;
+import utils.entry_utils.TestEntriesUpdaterDeleter;
+import utils.entry_utils.TestRunSimulator;
+import utils.tables_utils.CommonUtil;
 import utils.tables_utils.TestTableUtil;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TestCase2SelectModifyAndDeleteEntries {
 
@@ -22,7 +24,17 @@ public class TestCase2SelectModifyAndDeleteEntries {
 
     private List<TestEntry> initialEntries;
     private final List<TestEntry> changedEntries;
-    private HashMap<String, Integer> iDs;
+    private Map<String, Integer> iDs;
+
+    @BeforeClass
+    public void setUp() {
+        do {
+            int randomIntFromZeroToNine = Randomizer.getRandomIntFromZeroToNine();
+            initialEntries = TestTableUtil.getTestEntriesBasedOnID(randomIntFromZeroToNine);
+        } while (initialEntries.size() == 0);
+
+        iDs = CommonUtil.initializeDatabaseAndReturnNeededIDs();
+    }
 
     @DataProvider
     private Object[][] provideData() {
@@ -34,30 +46,20 @@ public class TestCase2SelectModifyAndDeleteEntries {
         return objects;
     }
 
-    @BeforeClass
-    public void setUp() {
-        int randomIntFromZeroToNine = Randomizer.getRandomIntFromZeroToNine();
-        do {
-            initialEntries = TestTableUtil.getTestEntriesBasedOnID(randomIntFromZeroToNine);
-        } while (initialEntries.size() == 0);
-
-        iDs = TestTableUtil.initializeDatabaseAndReturnNeededIDs();
-    }
-
     @Test(dataProvider = "provideData")
-    public void testImitateTestLauncher(TestEntry testEntry, HashMap<String, Integer> map) {
-        TestEntry testEntryAfterChange = TestTableUtil.simulateTestRuns(testEntry, map);
+    public void testImitateTestLauncher(TestEntry testEntry, Map<String, Integer> map) {
+        TestEntry testEntryAfterChange = TestRunSimulator.simulateTestRuns(testEntry, map);
         changedEntries.add(testEntryAfterChange);
     }
 
     @AfterClass
     public void tearDown() {
-        TestCollectorForUpdate.updateTestEntries(changedEntries);
-        boolean isUpdated = TestCollectorForUpdate.isEntriesUpdated(changedEntries, initialEntries);
+        TestEntriesUpdaterDeleter.updateTestEntries(changedEntries);
+        boolean isUpdated = TestEntriesUpdaterDeleter.isEntriesUpdated(changedEntries, initialEntries);
         Assert.assertTrue(isUpdated, "database isn't updated");
 
-        TestCollectorForUpdate.deleteTestEntries(changedEntries);
-        boolean isDeleted = TestCollectorForUpdate.isEntriesDeleted(changedEntries);
+        TestEntriesUpdaterDeleter.deleteTestEntries(changedEntries);
+        boolean isDeleted = TestEntriesUpdaterDeleter.isEntriesDeleted(changedEntries);
         Assert.assertTrue(isDeleted, "needed entries aren't deleted");
     }
 }

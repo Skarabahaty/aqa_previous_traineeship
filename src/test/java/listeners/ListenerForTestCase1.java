@@ -19,13 +19,9 @@ public class ListenerForTestCase1 implements ITestListener {
 
     @Override
     public void onStart(ITestContext context) {
-
         Session session = SessionTableUtil.getSessionAndAddItInDB();
-
         Author author = AuthorTableUtil.getAuthorAndAddItInDB();
-
         Project project = ProjectTableUtil.getProjectAndAddTiInDB();
-
         testEntry = TestTableUtil.getTestEntry(session, author, project);
     }
 

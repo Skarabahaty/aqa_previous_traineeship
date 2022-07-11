@@ -4,14 +4,15 @@ import models.Author;
 import models.Project;
 import models.Session;
 import models.TestEntry;
-import utils.Randomizer;
+import utils.entry_utils.TestEntryProducer;
 
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class TestTableUtil extends AbstractUtil {
+public class TestTableUtil extends CommonUtil {
 
     static {
         TEST_TABLE = "test";
@@ -31,83 +32,16 @@ public class TestTableUtil extends AbstractUtil {
         }
     }
 
-    private static String constructInsertQueryDraft(TestEntry testEntry, String queryDraft) {
-        StringBuilder insertQueryDraft = new StringBuilder(queryDraft);
-        insertQueryDraft.append("(");
-        List<Serializable> fields = testEntry.getFields();
-        int size = fields.size();
-        for (int i = 0; i < size; i++) {
-            Serializable serializable = fields.get(i);
-            switch (serializable.getClass().getSimpleName()) {
-                case "String":
-                case "Timestamp":
-                    insertQueryDraft.append("'").append(serializable).append("'");
-                    break;
-                case "Integer":
-                case "Long":
-                    insertQueryDraft.append(serializable);
-                    break;
-            }
-
-            if (size - i > 1) {
-                insertQueryDraft.append(", ");
-            }
-        }
-        insertQueryDraft.append(");");
-        return insertQueryDraft.toString();
-    }
-
     public static TestEntry checkForPresenceAndReturnEntry(TestEntry testEntry) {
         String checkForPresenceQuery = getCheckForPresenceQueryFromTestEntry(testEntry);
         try {
             ResultSet resultSet = STATEMENT.executeQuery(checkForPresenceQuery);
             resultSet.next();
-            return getTestEntry(resultSet);
+            return TestEntryProducer.getTestEntryFromResultSet(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("Problem wit query");
+            throw new RuntimeException("Problem with query");
         }
-    }
-
-    private static String getCheckForPresenceQueryFromTestEntry(TestEntry testEntry) {
-        return String.format(
-                QUERIES.get("check_test_for_presence").getAsString(),
-                TEST_TABLE,
-                testEntry.getName(),
-                testEntry.getStatusId(),
-                testEntry.getMethodName(),
-                testEntry.getProjectId(),
-                testEntry.getSessionId(),
-                testEntry.getStartTime(),
-                testEntry.getEndTime(),
-                testEntry.getEnv(),
-                testEntry.getBrowser());
-    }
-
-    public static TestEntry getTestEntry(ResultSet resultSet) throws SQLException { //FIXME
-        return new TestEntry(
-                resultSet.getInt("id"),
-                resultSet.getString("name"),
-                resultSet.getInt("status_id"),
-                resultSet.getString("method_name"),
-                resultSet.getInt("project_id"),
-                resultSet.getInt("session_id"),
-                resultSet.getString("start_time").replaceAll("\\.\\d+", ""),
-                resultSet.getString("end_time").replaceAll("\\.\\d+", ""),
-                resultSet.getString("env"),
-                resultSet.getString("browser"),
-                resultSet.getInt("author_id"));
-    }
-
-    public static HashMap<String, Integer> initializeDatabaseAndReturnNeededIDs() {
-        Session session = SessionTableUtil.getSessionAndAddItInDB();
-        Project project = ProjectTableUtil.getProjectAndAddTiInDB();
-        Author author = AuthorTableUtil.getAuthorAndAddItInDB();
-
-       return new HashMap<>(
-                Map.of("session", session.getId(),
-                        "project", project.getId(),
-                        "author", author.getId()));
     }
 
     public static List<TestEntry> getTestEntriesBasedOnID(int randomIntFromZeroToNine) {
@@ -120,9 +54,8 @@ public class TestTableUtil extends AbstractUtil {
             ResultSet resultSet = STATEMENT.executeQuery(selectCondition);
             List<TestEntry> returnList = new ArrayList<>();
             while (resultSet.next()) {
-                returnList.add(
-                        getTestEntry(resultSet)
-                );
+                TestEntry testEntry = TestEntryProducer.getTestEntryFromResultSet(resultSet);
+                returnList.add(testEntry);
             }
             return returnList;
         } catch (SQLException e) {
@@ -147,25 +80,13 @@ public class TestTableUtil extends AbstractUtil {
         }
     }
 
-    public static TestEntry simulateTestRuns(TestEntry testEntry, HashMap<String, Integer> map) {
-        TestEntry clone = testEntry.clone();
-        clone.setAuthorId(map.get("author"));
-        clone.setProjectId(map.get("project"));
-        clone.setSessionId(map.get("session"));
-        clone.setStatusId(Randomizer.getRandomIntFromOneToBorder(3));
-        clone.setStartTime(Calendar.getInstance().getTimeInMillis());
-        clone.setEndTime(Calendar.getInstance().getTimeInMillis() + 10000);
-        return clone;
-    }
-
-
     public static TestEntry selectByID(int id) {
         String getTestEntryDraft = QUERIES.get("select_by_id").getAsString();
         String getQuery = String.format(getTestEntryDraft, TEST_TABLE, id);
         try {
             ResultSet resultSet = STATEMENT.executeQuery(getQuery);
             resultSet.next();
-            return getTestEntry(resultSet);
+            return TestEntryProducer.getTestEntryFromResultSet(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Problem with query");
@@ -200,9 +121,51 @@ public class TestTableUtil extends AbstractUtil {
         String browser = TEST_CONFIGS.get("browser").getAsString();
         String env = TEST_CONFIGS.get("env").getAsString();
         String testName = TEST_CONFIGS.get("test_name").getAsString();
+        int sessionId = session.getId();
+        int projectId = project.getId();
+        int authorId = author.getId();
 
-        return new TestEntry(testName, session.getId(), project.getId(), author.getId(), browser, env);
+        return new TestEntry(testName, sessionId, projectId, authorId, browser, env);
     }
 
+    private static String constructInsertQueryDraft(TestEntry testEntry, String queryDraft) {
+        StringBuilder insertQueryDraft = new StringBuilder(queryDraft);
+        insertQueryDraft.append("(");
+        List<Serializable> fields = testEntry.getFields();
+        int size = fields.size();
+        for (int i = 0; i < size; i++) {
+            Serializable value = fields.get(i);
+            switch (value.getClass().getSimpleName()) {
+                case "String":
+                case "Timestamp":
+                    insertQueryDraft.append("'").append(value).append("'");
+                    break;
+                case "Integer":
+                case "Long":
+                    insertQueryDraft.append(value);
+                    break;
+            }
+            if (size - i > 1) {
+                insertQueryDraft.append(", ");
+            }
+        }
+        insertQueryDraft.append(")");
+        return insertQueryDraft.toString();
+    }
+
+    private static String getCheckForPresenceQueryFromTestEntry(TestEntry testEntry) {
+        return String.format(
+                QUERIES.get("check_test_for_presence").getAsString(),
+                TEST_TABLE,
+                testEntry.getName(),
+                testEntry.getStatusId(),
+                testEntry.getMethodName(),
+                testEntry.getProjectId(),
+                testEntry.getSessionId(),
+                testEntry.getStartTime(),
+                testEntry.getEndTime(),
+                testEntry.getEnv(),
+                testEntry.getBrowser());
+    }
 
 }

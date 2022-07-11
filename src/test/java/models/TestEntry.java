@@ -34,30 +34,22 @@ public class TestEntry implements Cloneable {
 
     private int projectId;
     private int id;
-    private String name;
+    private final String name;
     private int statusId;
     private String methodName;
     private int sessionId;
     private String startTime;
     private String endTime;
-    private String env;
-    private String browser;
+    private final String env;
+    private final String browser;
     private int authorId;
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public int getStatusId() {
@@ -112,20 +104,8 @@ public class TestEntry implements Cloneable {
         return env;
     }
 
-    public void setEnv(String env) {
-        this.env = env;
-    }
-
     public String getBrowser() {
         return browser;
-    }
-
-    public void setBrowser(String browser) {
-        this.browser = browser;
-    }
-
-    public int getAuthorId() {
-        return authorId;
     }
 
     public void setAuthorId(int authorId) {

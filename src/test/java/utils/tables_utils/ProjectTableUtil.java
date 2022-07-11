@@ -5,7 +5,7 @@ import models.Project;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ProjectTableUtil extends AbstractUtil {
+public class ProjectTableUtil extends CommonUtil {
 
     static {
         TEST_TABLE = "project";
@@ -25,7 +25,7 @@ public class ProjectTableUtil extends AbstractUtil {
     }
 
     private static String constructInsertQueryDraft(Project project, String queryDraft) {
-        return queryDraft + "('" + project.getName() + "')";
+        return String.format("%s('%s')", queryDraft, project.getName());
     }
 
     public static void checkForPresenceAndSetID(Project project) {
