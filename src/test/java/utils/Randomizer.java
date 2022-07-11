@@ -4,7 +4,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Randomizer {
 
-    private Randomizer() {}
+    private Randomizer() {
+    }
 
     private static final ThreadLocalRandom localRandom = ThreadLocalRandom.current();
 

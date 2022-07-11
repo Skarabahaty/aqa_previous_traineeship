@@ -9,9 +9,13 @@ import java.util.List;
 
 public class SessionTableUtil extends CommonUtil {
 
+    private SessionTableUtil() {
+    }
+
     static {
         TEST_TABLE = "session";
     }
+
     private static final String TEST_TABLE;
 
     public static void add(Session session) {
@@ -61,21 +65,6 @@ public class SessionTableUtil extends CommonUtil {
             throw new RuntimeException("Problem wit query");
         }
     }
-
-    /*private static Session getSession(ResultSet resultSet) {
-        return new Session(
-                resultSet.getInt("id"),
-                resultSet.getString("name"),
-                resultSet.getInt("status_id"),
-                resultSet.getString("method_name"),
-                resultSet.getInt("project_id"),
-                resultSet.getInt("session_id"),
-                resultSet.getString("start_time").replaceAll("\\.\\d+", ""),
-                resultSet.getString("end_time").replaceAll("\\.\\d+", ""),
-                resultSet.getString("env"),
-                resultSet.getString("browser"),
-                resultSet.getInt("author_id"));
-    }*/
 
     private static String getCheckForPresenceQueryFromSession(Session session) {
         return String.format(

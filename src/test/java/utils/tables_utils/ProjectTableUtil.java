@@ -7,9 +7,13 @@ import java.sql.SQLException;
 
 public class ProjectTableUtil extends CommonUtil {
 
+    private ProjectTableUtil() {
+    }
+
     static {
         TEST_TABLE = "project";
     }
+
     private static final String TEST_TABLE;
 
     public static void add(Project project) {
@@ -29,7 +33,7 @@ public class ProjectTableUtil extends CommonUtil {
     }
 
     public static void checkForPresenceAndSetID(Project project) {
-        String checkForPresenceQuery = getCheckForPresenceQueryFromTestEntry(project);
+        String checkForPresenceQuery = getCheckForPresenceQueryFromProject(project);
         try {
             ResultSet resultSet = STATEMENT.executeQuery(checkForPresenceQuery);
             resultSet.next();
@@ -40,7 +44,7 @@ public class ProjectTableUtil extends CommonUtil {
         }
     }
 
-    private static String getCheckForPresenceQueryFromTestEntry(Project project) {
+    private static String getCheckForPresenceQueryFromProject(Project project) {
         return String.format(
                 QUERIES.get("check_project_for_presence").getAsString(),
                 TEST_TABLE,
@@ -48,7 +52,7 @@ public class ProjectTableUtil extends CommonUtil {
     }
 
     public static boolean isProjectPresentInDatabase(Project project) {
-        String checkForPresenceQuery = getCheckForPresenceQueryFromTestEntry(project);
+        String checkForPresenceQuery = getCheckForPresenceQueryFromProject(project);
         try {
             ResultSet resultSet = STATEMENT.executeQuery(checkForPresenceQuery);
             return resultSet.next();
@@ -58,7 +62,7 @@ public class ProjectTableUtil extends CommonUtil {
         }
     }
 
-    public static Project getProjectAndAddTiInDB() {
+    public static Project getProjectAndAddItInDB() {
         String projectName = TEST_CONFIGS.get("project").getAsString();
         Project project = new Project(projectName);
         if (! isProjectPresentInDatabase(project)) {

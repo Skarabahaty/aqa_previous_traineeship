@@ -6,7 +6,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
 
 public class JDBConnector {
-    
+
+    private JDBConnector() {
+    }
+
     static {
         CONFIG = JsonReader.getDataFromFile("database_configs.json");
     }
@@ -50,5 +53,4 @@ public class JDBConnector {
             throw new RuntimeException("Problems with statement creation");
         }
     }
-
 }

@@ -9,7 +9,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Objects;
 
 public class JsonReader {
 
@@ -21,7 +20,7 @@ public class JsonReader {
         String userDir = System.getProperty("user.dir");
         String resourcesFolder = "src\\test\\resources";
         Path path = Paths.get(userDir, resourcesFolder, sourceFileName);
-        JsonElement jsonElement = null;
+        JsonElement jsonElement;
         try (
                 BufferedReader bufferedReader = new BufferedReader(
                         new FileReader(path.toFile())
@@ -30,8 +29,9 @@ public class JsonReader {
             jsonElement = JsonParser.parseReader(bufferedReader);
         } catch (IOException e) {
             e.printStackTrace();
+            throw new RuntimeException("Problem with json reading");
         }
 
-        return Objects.requireNonNull(jsonElement).getAsJsonObject();
+        return jsonElement.getAsJsonObject();
     }
 }

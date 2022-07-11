@@ -21,7 +21,7 @@ public class ListenerForTestCase1 implements ITestListener {
     public void onStart(ITestContext context) {
         Session session = SessionTableUtil.getSessionAndAddItInDB();
         Author author = AuthorTableUtil.getAuthorAndAddItInDB();
-        Project project = ProjectTableUtil.getProjectAndAddTiInDB();
+        Project project = ProjectTableUtil.getProjectAndAddItInDB();
         testEntry = TestTableUtil.getTestEntry(session, author, project);
     }
 

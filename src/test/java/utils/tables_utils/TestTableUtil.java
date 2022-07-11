@@ -14,6 +14,9 @@ import java.util.List;
 
 public class TestTableUtil extends CommonUtil {
 
+    private TestTableUtil() {
+    }
+
     static {
         TEST_TABLE = "test";
     }
@@ -116,7 +119,6 @@ public class TestTableUtil extends CommonUtil {
         }
     }
 
-
     public static TestEntry getTestEntry(Session session, Author author, Project project) {
         String browser = TEST_CONFIGS.get("browser").getAsString();
         String env = TEST_CONFIGS.get("env").getAsString();
@@ -167,5 +169,4 @@ public class TestTableUtil extends CommonUtil {
                 testEntry.getEnv(),
                 testEntry.getBrowser());
     }
-
 }

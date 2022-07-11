@@ -7,6 +7,10 @@ import java.util.Calendar;
 import java.util.Map;
 
 public class TestRunSimulator {
+
+    private TestRunSimulator() {
+    }
+
     public static TestEntry simulateTestRuns(TestEntry testEntry, Map<String, Integer> map) {
         TestEntry clone = testEntry.clone();
         clone.setAuthorId(map.get("author"));

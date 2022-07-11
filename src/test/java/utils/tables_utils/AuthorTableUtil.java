@@ -10,9 +10,13 @@ import java.util.List;
 
 public class AuthorTableUtil extends CommonUtil {
 
+    private AuthorTableUtil() {
+    }
+
     static {
         TEST_TABLE = "author";
     }
+
     private static final String TEST_TABLE;
 
     public static void add(Author author) {
@@ -52,18 +56,18 @@ public class AuthorTableUtil extends CommonUtil {
     }
 
     public static void checkForPresenceAndSetID(Author author) {
-        String checkForPresenceQuery = getCheckForPresenceQueryFromTestEntry(author);
+        String checkForPresenceQuery = getCheckForPresenceQueryFromAuthor(author);
         try {
             ResultSet resultSet = STATEMENT.executeQuery(checkForPresenceQuery);
             resultSet.next();
             author.setId(resultSet.getInt("id"));
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("Problem wit query");
+            throw new RuntimeException("Problem with query");
         }
     }
 
-    private static String getCheckForPresenceQueryFromTestEntry(Author author) {
+    private static String getCheckForPresenceQueryFromAuthor(Author author) {
         return String.format(
                 QUERIES.get("check_author_for_presence").getAsString(),
                 TEST_TABLE,
@@ -73,7 +77,7 @@ public class AuthorTableUtil extends CommonUtil {
     }
 
     public static boolean isAuthorPresentInDatabase(Author author) {
-        String checkForPresenceQuery = getCheckForPresenceQueryFromTestEntry(author);
+        String checkForPresenceQuery = getCheckForPresenceQueryFromAuthor(author);
         try {
             ResultSet resultSet = STATEMENT.executeQuery(checkForPresenceQuery);
             return resultSet.next();

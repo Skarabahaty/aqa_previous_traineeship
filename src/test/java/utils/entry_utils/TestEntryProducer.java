@@ -7,6 +7,9 @@ import java.sql.SQLException;
 
 public class TestEntryProducer {
 
+    private TestEntryProducer() {
+    }
+
     public static TestEntry getTestEntryFromResultSet(ResultSet resultSet) throws SQLException {
         return new TestEntry(
                 resultSet.getInt("id"),

@@ -12,13 +12,16 @@ import java.util.Map;
 
 public class CommonUtil {
 
+    protected CommonUtil() {
+    }
+
     protected static final JsonObject QUERIES = JsonReader.getDataFromFile("queries.json");
     protected static final Statement STATEMENT = JDBConnector.getStatement();
     protected static final JsonObject TEST_CONFIGS = JsonReader.getDataFromFile("test_configs.json");
 
     public static Map<String, Integer> initializeDatabaseAndReturnNeededIDs() {
         Session session = SessionTableUtil.getSessionAndAddItInDB();
-        Project project = ProjectTableUtil.getProjectAndAddTiInDB();
+        Project project = ProjectTableUtil.getProjectAndAddItInDB();
         Author author = AuthorTableUtil.getAuthorAndAddItInDB();
 
         return Map.of("session", session.getId(),

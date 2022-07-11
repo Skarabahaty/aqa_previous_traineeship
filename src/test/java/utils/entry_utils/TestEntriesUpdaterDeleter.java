@@ -8,6 +8,9 @@ import java.util.List;
 
 public class TestEntriesUpdaterDeleter {
 
+    private TestEntriesUpdaterDeleter() {
+    }
+
     public static void updateTestEntries(List<TestEntry> changedEntries) {
         changedEntries.forEach(TestTableUtil::update);
     }
